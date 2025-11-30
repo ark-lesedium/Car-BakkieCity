@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Privacy Policy — Car and Bakkie City Kimberley</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+	<!-- Navbar (shared) -->
+	<nav class="navbar">
+		<div class="container nav-container">
+			<a href="index.html" class="logo">
+				<div class="brand">
+					<img src="images/CarandBakkieCityLogo.jpg" alt="Car & Bakkie City logo" class="logo-img">
+					<span class="logo-subtitle">Kimberley</span>
+				</div>
+			</a>
+			<div class="mobile-toggle">
+				<i class="fas fa-bars"></i>
+			</div>
+			<ul class="nav-links">
+				<li><a href="buy.html" class="nav-link nav-cta">Buy a Car</a></li>
+				<li><a href="sell.html" class="nav-link nav-cta">Sell a Car</a></li>
+				<li><a href="contact.html" class="nav-link">Contact</a></li>
+				<li><a href="about.html" class="nav-link">About</a></li>
+				<li><a href="index.html" class="nav-link">Home</a></li>
+				<li><a href="inventory.html" class="nav-link">Inventory</a></li>
+
+			</ul>
+		</div>
+	</nav>
+
+	<main class="section">
+		<div class="container">
+			<h2 class="section-title">Privacy Policy</h2>
+			<p>This is a placeholder privacy policy for Car and Bakkie City Kimberley. Replace this text with your
+				actual privacy policy content describing how you collect, use, and protect user data.</p>
+			<p>Important items to cover: what data is collected, how it's used, third-party services, cookies, data
+				retention, and contact details for privacy inquiries.</p>
+		</div>
+	</main>
+
+	<!-- Footer (shared) -->
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-container">
+				<div class="footer-col">
+					<h3>Car and Bakkie City Kimberley</h3>
+					<p>Your trusted partner for quality pre-owned vehicles with transparent pricing and exceptional
+						service.</p>
+				</div>
+				<div class="footer-col">
+					<h3>Quick Links</h3>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="about.html">About Us</a></li>
+						<li><a href="inventory.html">Inventory</a></li>
+
+						<li><a href="contact.html">Contact</a></li>
+						<li><a href="privacy-policy.html">Privacy Policy</a></li>
+						<li><a href="terms-of-use.html">Terms of Use</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h3>Contact Us</h3>
+					<ul>
+						<li><i class="fas fa-map-marker-alt"></i> Headquarters/Main Address: 4-10 Hall Street(6 Elbow
+							Street), Kimberley</li>
+						<li><i class="fas fa-phone"></i> <a href="tel:+27785029113">+27 78 502 9113</a></li>
+						<li><i class="fas fa-envelope"></i> Zakariya — <a
+								href="mailto:zakariya@carandbakkiecity.co.za">zakariya@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-envelope"></i> Ebrahim — <a
+								href="mailto:ebrahim@carandbakkiecity.co.za">ebrahim@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-envelope"></i> Jaun — <a
+								href="mailto:jaun@carandbakkiecity.co.za">jaun@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-clock"></i> Mon-Sat: 9am-7pm</li>
+					</ul>
+				</div>
+			</div>
+			<div class="copyright">
+				<p>&copy; 2025/6 KBA Motor Wholesalers. All Rights Reserved. Powered by <a
+						href="https://randpowerstate.co.za" target="_blank" rel="noopener noreferrer">RANDPOWERSTATE
+						(PTY) LTD</a></p>
+			</div>
+		</div>
+	</footer>
+
+	<script>
+		// Mobile Navigation Toggle
+		const mobileToggle = document.querySelector('.mobile-toggle');
+		const navLinks = document.querySelector('.nav-links');
+
+		mobileToggle.addEventListener('click', () => {
+			navLinks.classList.toggle('active');
+		});
+
+		// Navbar scroll effect
+		window.addEventListener('scroll', () => {
+			const navbar = document.querySelector('.navbar');
+			if (window.scrollY > 50) {
+				navbar.classList.add('scrolled');
+			} else {
+				navbar.classList.remove('scrolled');
+			}
+		});
+
+		// Close mobile menu when clicking on a link
+		document.querySelectorAll('.nav-link').forEach(link => {
+			link.addEventListener('click', () => {
+				navLinks.classList.remove('active');
+			});
+		});
+	</script>
+</body>
+
+</html>

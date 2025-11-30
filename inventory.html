@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Inventory — Car and Bakkie City Kimberley</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://cdn.tailwindcss.com"></script>
+
+	<style>
+		/* Small in-page progress bar for inventory fetch */
+		.progress-wrap {
+			width: 100%;
+			max-width: 720px;
+			margin-top: 8px;
+		}
+
+		.progress-bar {
+			width: 100%;
+			height: 8px;
+			background: rgba(0, 0, 0, 0.06);
+			border-radius: 999px;
+			overflow: hidden;
+		}
+
+		.progress-fill {
+			height: 100%;
+			width: 0%;
+			background: linear-gradient(90deg, #f97373, #fb923c);
+			transition: width 200ms linear;
+		}
+
+		.progress-hidden {
+			display: none;
+		}
+
+		/* Search UI styles (from Tailwind example) */
+		.search-container {
+			backdrop-filter: blur(6px);
+		}
+
+		.search-input {
+			transition: all 0.2s ease;
+		}
+
+		.search-input:focus {
+			outline: none;
+			box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+		}
+
+		.select-custom {
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+			background-position: right 0.5rem center;
+			background-repeat: no-repeat;
+			background-size: 1.5em 1.5em;
+			padding-right: 2.5rem;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+		}
+
+		.btn {
+			transition: all 0.2s ease;
+		}
+
+		.btn:hover {
+			transform: translateY(-1px);
+		}
+
+		.advanced-panel {
+			transition: all 0.3s ease;
+		}
+
+		/* Vehicle grid and card styles */
+		/* Allow more columns by reducing the minimum card width and image height */
+		.vehicle-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+			gap: 16px;
+			margin-top: 18px
+		}
+
+		.vehicle-card {
+			background: white;
+			border-radius: 12px;
+			overflow: hidden;
+			border: 1px solid rgba(16, 24, 40, 0.04);
+			box-shadow: 0 6px 18px rgba(11, 15, 20, 0.03);
+			display: flex;
+			flex-direction: column
+		}
+
+		/* Vehicle images: target exact size 432x420 but remain responsive via max-width */
+		.vehicle-card img {
+			width: 432px;
+			height: 420px;
+			max-width: 100%;
+			object-fit: cover;
+			display: block;
+		}
+
+		.vehicle-card .card-body {
+			padding: 12px;
+			display: flex;
+			flex-direction: column;
+			gap: 8px
+		}
+
+		.vehicle-card .title {
+			font-weight: 700;
+			color: #111827
+		}
+
+		.vehicle-card .meta {
+			font-size: 0.9rem;
+			color: #6b7280
+		}
+
+		.vehicle-card .price {
+			font-weight: 700;
+			color: #0ea5a4
+		}
+
+		.vehicle-card .actions {
+			margin-top: 6px;
+			display: flex;
+			gap: 8px;
+			justify-content: flex-start;
+			/* keep buttons left aligned */
+			align-items: center;
+			align-self: flex-start;
+			/* avoid stretching to full width of card body */
+		}
+
+		/* Smaller buttons inside vehicle cards to save space */
+		.vehicle-card .actions .btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 6px 8px;
+			font-size: 0.85rem;
+			border-radius: 8px;
+			min-width: 0;
+			/* allow button to shrink to content */
+			white-space: nowrap;
+		}
+
+		/* Detailed view when user searched: show list with large images and more specs */
+		.vehicle-grid.detailed {
+			grid-template-columns: 1fr
+		}
+
+		.vehicle-grid.detailed .vehicle-card {
+			flex-direction: row;
+			gap: 0
+		}
+
+		.vehicle-grid.detailed .vehicle-card img {
+			/* Detailed view uses the same target size; allow it to scale down via max-width */
+			width: 432px;
+			height: 420px;
+			max-width: 100%;
+			border-radius: 0;
+		}
+
+		.vehicle-grid.detailed .vehicle-card .card-body {
+			padding: 18px
+		}
+
+		.vehicle-card .thumbs {
+			display: flex;
+			gap: 8px;
+			margin-top: 10px
+		}
+
+		.vehicle-card .thumbs img {
+			width: 72px;
+			height: 52px;
+			object-fit: cover;
+			border-radius: 8px;
+			cursor: pointer;
+			border: 1px solid rgba(16, 24, 40, 0.04)
+		}
+
+		@media (max-width:900px) {
+
+			/* On smaller screens make images fluid and let height auto-adjust */
+			.vehicle-card img {
+				width: 100%;
+				height: auto;
+				max-height: 60vh;
+			}
+
+			.vehicle-grid.detailed .vehicle-card {
+				flex-direction: column
+			}
+
+			.vehicle-grid.detailed .vehicle-card img {
+				width: 100%;
+				height: auto;
+			}
+		}
+
+		/* Wider content area for inventory so the results grid can use more horizontal space on desktop */
+		@media (min-width:1100px) {
+			#inventory .container {
+				max-width: 1400px
+			}
+		}
+
+		/* At very large screens, allow even narrower cards so more tiles fit per row */
+		@media (min-width:1400px) {
+			.vehicle-grid {
+				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+				gap: 18px
+			}
+
+			/* Keep the target image height on large desktop but allow scaling with max-width */
+			.vehicle-card img {
+				height: 420px;
+			}
+		}
+
+		/* Navbar and footer theme overrides to match brand: red navbar, yellow footer */
+		.navbar {
+			background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+			color: #fff;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+			position: sticky;
+			top: 0;
+			z-index: 60;
+		}
+
+		.navbar .nav-container {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 12px 16px;
+			max-width: 1200px;
+			margin: 0 auto
+		}
+
+		.navbar .logo {
+			display: flex;
+			align-items: center;
+			gap: 10px
+		}
+
+		.navbar .logo .logo-img {
+			height: 46px;
+			width: auto;
+			border-radius: 6px
+		}
+
+		.navbar .logo .logo-subtitle {
+			color: rgba(255, 255, 255, 0.9);
+			font-size: 0.9rem
+		}
+
+		.nav-links {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			margin: 0;
+			padding: 0;
+			list-style: none
+		}
+
+		.nav-links li {
+			list-style: none
+		}
+
+		.nav-link {
+			color: #fff;
+			text-decoration: none;
+			padding: 8px 10px;
+			border-radius: 8px;
+			font-weight: 600;
+			display: inline-block
+		}
+
+		.nav-link:hover {
+			background: rgba(255, 255, 255, 0.08)
+		}
+
+		.nav-cta {
+			background: #fff;
+			color: #b91c1c;
+			padding: 8px 12px;
+			border-radius: 10px;
+			font-weight: 700
+		}
+
+		.nav-cta:hover {
+			background: #ffecec
+		}
+
+		.mobile-toggle {
+			display: none;
+			color: #fff;
+			cursor: pointer
+		}
+
+		@media(max-width:900px) {
+			.nav-links {
+				display: none
+			}
+
+			.mobile-toggle {
+				display: block
+			}
+
+			.navbar .logo .logo-img {
+				height: 40px
+			}
+		}
+
+		/* Footer styling: black background with white text for strong contrast */
+		.footer {
+			background: #000;
+			color: #ffffff;
+			padding: 28px 0;
+			border-top: 1px solid rgba(255, 255, 255, 0.06)
+		}
+
+		.footer a {
+			color: inherit;
+			text-decoration: none
+		}
+
+		.footer a:hover {
+			text-decoration: underline;
+			color: #e5e7eb
+		}
+
+		.footer .footer-container {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+			gap: 18px
+		}
+
+		.footer .footer-col h3 {
+			color: #ffffff;
+			margin-bottom: 8px
+		}
+
+		/* Small layout polish */
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 16px
+		}
+
+		.inventory-hero h1 {
+			margin: 0 0 6px;
+			font-size: 2rem
+		}
+
+		.inventory-hero p {
+			color: #374151;
+			margin: 0 0 12px
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Navbar (shared) -->
+	<nav class="navbar">
+		<div class="container nav-container">
+			<a href="index.html" class="logo">
+				<div class="brand">
+					<img src="images/CarandBakkieCityLogo.jpg" alt="Car & Bakkie City logo" class="logo-img">
+					<span class="logo-subtitle">Kimberley</span>
+				</div>
+			</a>
+			<div class="mobile-toggle">
+				<i class="fas fa-bars"></i>
+			</div>
+			<ul class="nav-links">
+				<li><a href="buy.html" class="nav-link nav-cta">Buy a Car</a></li>
+				<li><a href="sell.html" class="nav-link nav-cta">Sell a Car</a></li>
+				<li><a href="contact.html" class="nav-link">Contact</a></li>
+				<li><a href="about.html" class="nav-link">About</a></li>
+				<li><a href="index.html" class="nav-link">Home</a></li>
+				<li><a href="inventory.html" class="nav-link">Inventory</a></li>
+
+			</ul>
+		</div>
+	</nav>
+
+	<main id="inventory" class="section search">
+		<div class="container">
+			<div class="inventory-hero">
+				<h1>Inventory</h1>
+				<p>Browse our latest selection of quality pre-owned vehicles — carefully inspected and priced to sell.
+				</p>
+			</div>
+
+			<div class="grid" style="grid-template-columns: 1fr; gap:24px; align-items:start;">
+
+				<!-- Results + search bar (sidebar filters removed per request) -->
+				<section class="inventory-results">
+					<div
+						class="search-container bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-gray-100 mb-4">
+						<form id="inventorySearchForm" class="search-form">
+							<div class="flex flex-col sm:flex-row gap-4 mb-4">
+								<div class="flex-1">
+									<label for="q" class="sr-only">Search</label>
+									<div class="relative">
+										<input id="q" name="query" type="search"
+											placeholder="Search make, model or keyword"
+											class="search-input w-full px-4 py-3 bg-white border border-gray-200 text-gray-900 placeholder-gray-500 rounded-lg focus:border-red-500" />
+										<div class="absolute inset-y-0 right-3 flex items-center">
+											<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
+												viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+													d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+											</svg>
+										</div>
+									</div>
+								</div>
+
+								<div class="flex gap-3">
+									<button type="submit"
+										class="btn px-6 py-3 bg-red-600 text-white hover:bg-red-700 transition-colors rounded-lg font-medium">Search</button>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div>
+						<span id="fetchStatus" class="fetch-status">Loading inventory...</span>
+						<div id="progressWrap" class="progress-wrap progress-hidden" aria-hidden="true">
+							<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+								aria-valuenow="0">
+								<div id="progressFill" class="progress-fill" style="width:0%"></div>
+							</div>
+						</div>
+					</div>
+
+					<div id="vehicleGrid" class="vehicle-grid" aria-live="polite">
+						<!-- Vehicles will be rendered here by JavaScript -->
+					</div>
+					<!-- Pagination controls -->
+					<nav id="pagination" class="pagination mt-6 flex items-center justify-center gap-3"
+						aria-label="Pagination">
+						<!-- dynamically populated -->
+					</nav>
+					<pre id="fetchDump" class="fetch-dump"
+						style="display:none; white-space: pre-wrap; background:#f6f8fa; padding:12px; border-radius:6px; margin-top:12px; max-height:240px; overflow:auto;"></pre>
+				</section>
+			</div>
+
+			<!-- (duplicate results block removed; results are rendered in the right column above) -->
+
+		</div>
+	</main>
+
+	<!-- Footer (shared) -->
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-container">
+				<div class="footer-col">
+					<h3>Car and Bakkie City Kimberley</h3>
+					<p>Your trusted partner for quality pre-owned vehicles with transparent pricing and exceptional
+						service.</p>
+					<div class="social-links">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+				<div class="footer-col">
+					<h3>Quick Links</h3>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="about.html">About Us</a></li>
+						<li><a href="inventory.html">Inventory</a></li>
+
+						<li><a href="contact.html">Contact</a></li>
+						<li><a href="privacy-policy.html">Privacy Policy</a></li>
+						<li><a href="terms-of-use.html">Terms of Use</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h3>Services</h3>
+					<ul>
+						<li><a href="#">Vehicle Sales</a></li>
+						<li><a href="#">Financing through Capitec Bank</a></li>
+						<li><a href="#">Vehicle Inspection</a></li>
+						<li><a href="#">Trade-In</a></li>
+						<li><a href="#">After Sales Support</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h3>Contact Us</h3>
+					<ul>
+						<li><i class="fas fa-map-marker-alt"></i> Headquarters/Main Address: 4-10 Hall Street(6 Elbow
+							Street), Kimberley</li>
+						<li><i class="fas fa-phone"></i> <a href="tel:+27785029113">+27 78 502 9113</a></li>
+						<li><i class="fas fa-envelope"></i> Zakariya — <a
+								href="mailto:zakariya@carandbakkiecity.co.za">zakariya@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-envelope"></i> Ebrahim — <a
+								href="mailto:ebrahim@carandbakkiecity.co.za">ebrahim@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-envelope"></i> Jaun — <a
+								href="mailto:jaun@carandbakkiecity.co.za">jaun@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-clock"></i> Mon-Sat: 9am-7pm</li>
+					</ul>
+				</div>
+			</div>
+			<div class="copyright">
+				<p>&copy; 2025/6 KBA Motor Wholesalers. All Rights Reserved. Powered by <a
+						href="https://randpowerstate.co.za" target="_blank" rel="noopener noreferrer">RANDPOWERSTATE
+						(PTY) LTD</a></p>
+			</div>
+		</div>
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
+	<script type="module">
+		// Import the fetch functions from the connections module (which contains your credentials)
+		import { fetchCars, fetchCarsFiltered, fetchCarsPage } from './connections/supabase_client.js';
+
+		const grid = document.getElementById('vehicleGrid');
+
+		// Progress bar controller
+		let _progressTimer = null;
+		let _currentProgress = 0;
+
+		function showProgress() {
+			const wrap = document.getElementById('progressWrap');
+			const fill = document.getElementById('progressFill');
+			if (!wrap || !fill) return;
+			wrap.classList.remove('progress-hidden');
+			_currentProgress = 0;
+			setProgress(2);
+			// slowly advance to 80% while loading
+			clearInterval(_progressTimer);
+			_progressTimer = setInterval(() => {
+				if (_currentProgress < 80) setProgress(_currentProgress + Math.random() * 6 + 2);
+			}, 350);
+		}
+
+		function setProgress(n) {
+			n = Math.max(0, Math.min(100, Math.round(n)));
+			_currentProgress = n;
+			const fill = document.getElementById('progressFill');
+			const bar = document.querySelector('.progress-bar');
+			if (fill) {
+				fill.style.width = n + '%';
+				if (bar) bar.setAttribute('aria-valuenow', String(n));
+			}
+		}
+
+		function hideProgress() {
+			clearInterval(_progressTimer);
+			setProgress(100);
+			setTimeout(() => {
+				const wrap = document.getElementById('progressWrap');
+				if (wrap) wrap.classList.add('progress-hidden');
+				setProgress(0);
+			}, 400);
+		}
+
+		function formatPrice(value) {
+			if (value == null || value === '') return '';
+			const n = Number(value);
+			if (Number.isNaN(n)) return value;
+			return 'R ' + n.toLocaleString();
+		}
+
+		function createCard(vehicle, detailed = false) {
+			// Use exact column names from the `cars` table schema
+			const img = vehicle.main_image_url || (Array.isArray(vehicle.gallery_images) && vehicle.gallery_images[0]) || 'images/CarandBakkieCityLogo.jpg';
+			const year = vehicle.year || '';
+			const make = vehicle.make || '';
+			const model = vehicle.model || '';
+			const variant = vehicle.variant || '';
+			const title = [year, make, model, variant].filter(Boolean).join(' ');
+			const engine = vehicle.engine_type || '';
+			const transmission = vehicle.transmission || '';
+			const drivetrain = vehicle.drivetrain || '';
+			const mileage = vehicle.mileage || '';
+			const metaParts = [];
+			if (engine) metaParts.push(engine);
+			if (transmission) metaParts.push(transmission);
+			if (drivetrain) metaParts.push(drivetrain);
+			if (mileage) metaParts.push((typeof mileage === 'number' ? mileage.toLocaleString() : mileage) + ' km');
+			const meta = metaParts.join(' • ');
+			const currency = vehicle.currency || 'R';
+			const priceVal = vehicle.price;
+			const price = (priceVal == null || priceVal === '') ? '' : `${currency} ${Number(priceVal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+			const availability = vehicle.availability_status ? `<div class="availability">${vehicle.availability_status}</div>` : '';
+
+			const card = document.createElement('div');
+			card.className = 'vehicle-card';
+			card.style.cursor = 'pointer';
+			// click to open detail unless clicking inside actionable elements
+			card.addEventListener('click', (e) => {
+				if (e.target.closest('a') || e.target.closest('button')) return;
+				window.location.href = `vehicle-detail.html?id=${encodeURIComponent(vehicle.id)}`;
+			});
+
+			if (!detailed) {
+				card.innerHTML = `
+					<img src="${img}" alt="${title}">
+					<div class="card-body">
+						<div class="title">${title || 'Vehicle'}</div>
+						${availability}
+						<div class="meta">${meta}</div>
+						<div class="price">${price}</div>
+						<div class="actions">
+							<a href="contact.html?id=${encodeURIComponent(vehicle.id)}" class="btn">Enquire</a>
+							<a href="vehicle-detail.html?id=${encodeURIComponent(vehicle.id)}" class="btn">Details</a>
+						</div>
+					</div>
+				`;
+			} else {
+				// Detailed layout: large image + body with specs (only the main image — no thumbnails)
+				const specsHtml = [];
+				if (vehicle.engine_type) specsHtml.push(`<div><strong>Engine:</strong> ${vehicle.engine_type}${vehicle.engine_size ? ' ' + vehicle.engine_size : ''}</div>`);
+				if (vehicle.transmission) specsHtml.push(`<div><strong>Transmission:</strong> ${vehicle.transmission}</div>`);
+				if (vehicle.drivetrain) specsHtml.push(`<div><strong>Drivetrain:</strong> ${vehicle.drivetrain}</div>`);
+				if (vehicle.mileage) specsHtml.push(`<div><strong>Mileage:</strong> ${typeof vehicle.mileage === 'number' ? vehicle.mileage.toLocaleString() : vehicle.mileage} km</div>`);
+				card.innerHTML = `
+					<img src="${img}" alt="${title}">
+					<div class="card-body">
+						<div class="title">${title || 'Vehicle'}</div>
+						${availability}
+						<div class="meta">${meta}</div>
+						<div class="specs">${specsHtml.join('')}</div>
+						<div class="price">${price}</div>
+						<div class="actions">
+							<a href="contact.html?id=${encodeURIComponent(vehicle.id)}" class="btn">Enquire</a>
+							<a href="vehicle-detail.html?id=${encodeURIComponent(vehicle.id)}" class="btn">Details</a>
+						</div>
+					</div>
+				`;
+
+				// no thumbnails: card shows only the single main image
+			}
+
+			return card;
+		}
+
+		function updateQueryString(params) {
+			const url = new URL(window.location.href);
+			Object.keys(params).forEach(k => {
+				if (params[k] === undefined || params[k] === null || params[k] === '') url.searchParams.delete(k);
+				else url.searchParams.set(k, params[k]);
+			});
+			window.history.replaceState({}, '', url.toString());
+		}
+
+		function renderPagination(totalCount, currentPage = 1, perPage = 12) {
+			const container = document.getElementById('pagination');
+			if (!container) return;
+			container.innerHTML = '';
+			const totalPages = Math.max(1, Math.ceil((totalCount || 0) / perPage));
+
+			// Prev button
+			const prev = document.createElement('button');
+			prev.className = 'btn';
+			prev.textContent = 'Prev';
+			prev.disabled = currentPage <= 1;
+			prev.addEventListener('click', () => changePage(currentPage - 1));
+			container.appendChild(prev);
+
+			// Page info
+			const info = document.createElement('span');
+			info.className = 'text-sm text-gray-700 px-2';
+			info.textContent = `Page ${currentPage} of ${totalPages}`;
+			container.appendChild(info);
+
+			// Next button
+			const next = document.createElement('button');
+			next.className = 'btn';
+			next.textContent = 'Next';
+			next.disabled = currentPage >= totalPages;
+			next.addEventListener('click', () => changePage(currentPage + 1));
+			container.appendChild(next);
+
+			// Per-page select
+			const perSelect = document.createElement('select');
+			perSelect.className = 'form-control ml-4';
+			[6, 12, 24, 48].forEach(n => {
+				const o = document.createElement('option'); o.value = String(n); o.textContent = `${n} / page`; if (n === perPage) o.selected = true; perSelect.appendChild(o);
+			});
+			perSelect.addEventListener('change', (e) => changePage(1, Number(e.target.value)));
+			container.appendChild(perSelect);
+		}
+
+		function changePage(page, perPage = undefined) {
+			const params = new URLSearchParams(window.location.search);
+			if (perPage) params.set('perPage', String(perPage));
+			else if (params.get('perPage')) perPage = Number(params.get('perPage'));
+			params.set('page', String(page));
+			// update URL without reload
+			window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+			loadAndRender(page, perPage || Number(params.get('perPage') || 12));
+		}
+
+		async function loadAndRender(page = 1, perPage = 12) {
+			try {
+				const status = document.getElementById('fetchStatus');
+				status.textContent = 'Loading vehicles...';
+
+				// show progress bar while fetching
+				showProgress();
+
+				// Read URL params for filters + pagination
+				const params = new URLSearchParams(window.location.search);
+				const filters = {
+					query: params.get('query') || undefined,
+					make: params.get('make') || undefined,
+					model: params.get('model') || undefined,
+					year: params.get('year') || undefined,
+					min_price: params.get('min_price') || params.get('minPrice') || undefined,
+					max_price: params.get('max_price') || params.get('maxPrice') || undefined,
+				};
+
+				// Attempt to use server-side pagination if available
+				let vehicles = [];
+				let totalCount = 0;
+				const usePaged = typeof fetchCarsPage === 'function';
+				if (usePaged) {
+					const res = await fetchCarsPage({ filters, page, perPage });
+					vehicles = res.data || [];
+					totalCount = res.count || 0;
+				} else {
+					// Fallback: fetch all and paginate client-side
+					const hasAnyFilter = Object.values(filters).some(v => v !== undefined && v !== '');
+					if (hasAnyFilter) vehicles = await fetchCarsFiltered(filters);
+					else vehicles = await fetchCars();
+					totalCount = vehicles ? vehicles.length : 0;
+					// slice client-side
+					const start = (page - 1) * perPage;
+					vehicles = (vehicles || []).slice(start, start + perPage);
+				}
+				if (!vehicles) {
+					status.textContent = 'Failed to fetch vehicles (see console).';
+					grid.innerHTML = '';
+					hideProgress();
+					return;
+				}
+
+				if (vehicles.length === 0) {
+					status.textContent = 'No vehicles found.';
+					grid.innerHTML = '';
+					renderPagination(totalCount, page, perPage);
+					hideProgress();
+					return;
+				}
+
+				status.textContent = `${totalCount || vehicles.length} vehicle(s) found.`;
+				grid.innerHTML = '';
+				// If a query was provided, show a more comprehensive list with larger images
+				const isQuery = Boolean(new URLSearchParams(window.location.search).get('query'));
+				grid.classList.toggle('detailed', isQuery);
+				for (const v of vehicles) {
+					const card = createCard(v, isQuery);
+					grid.appendChild(card);
+				}
+
+				// render pagination controls (totalCount may be 0 if unknown)
+				renderPagination(totalCount || vehicles.length, page, perPage);
+				hideProgress();
+
+				// show a small JSON dump (first 5 items) for debugging in-browser
+				const dump = document.getElementById('fetchDump');
+				if (dump) {
+					// populate debug dump but keep it hidden by default
+					dump.textContent = JSON.stringify(vehicles.slice(0, 5), null, 2);
+				}
+
+				// small debug: attach dataset of returned ids for quick inspection
+				grid.dataset.ids = vehicles.map(x => x.id).join(',');
+			} catch (err) {
+				console.error('Failed to load vehicles', err);
+				const status = document.getElementById('fetchStatus');
+				if (status) status.textContent = 'Error loading vehicles — see console for details.';
+			}
+		}
+
+		// start with page/perPage from URL if present
+		(function init() {
+			const params = new URLSearchParams(window.location.search);
+			const page = Number(params.get('page')) || 1;
+			const perPage = Number(params.get('perPage')) || 12;
+			loadAndRender(page, perPage);
+		})();
+
+		// --- Search UI wiring: advanced toggle, clear/apply and form submit ---
+		(function wireSearchUI() {
+			const toggleAdvanced = document.getElementById('toggleAdvanced');
+			const filtersAside = document.getElementById('filtersAside');
+			const clearFilters = document.getElementById('clearFilters');
+			const applyFilters = document.getElementById('applyFilters');
+			const searchForm = document.getElementById('inventorySearchForm');
+
+			function ensureInit() {
+				// nothing special needed; sidebar is persistent on desktop
+				return;
+			}
+
+			function toggleAdvancedPanel() {
+				// On small screens, make the filters aside visible by scrolling to it
+				if (!filtersAside) return;
+				filtersAside.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}
+
+			function clearAllFilters() {
+				const form = document.getElementById('inventoryFiltersForm');
+				if (!form) return;
+				form.querySelectorAll('select').forEach(s => { s.selectedIndex = 0; });
+				const q = document.getElementById('q'); if (q) q.value = '';
+			}
+
+			function collectFilters() {
+				const vals = {};
+				const q = document.getElementById('q')?.value?.trim(); if (q) vals.query = q;
+				const make = document.getElementById('make')?.value; if (make) vals.make = make;
+				const model = document.getElementById('model')?.value; if (model) vals.model = model;
+				const year = document.getElementById('year')?.value; if (year) vals.year = year;
+				const price = document.getElementById('price')?.value; if (price) vals.max_price = price;
+				const type = document.getElementById('type')?.value; if (type) vals.type = type;
+				const transmission = document.getElementById('transmission')?.value; if (transmission) vals.transmission = transmission;
+				const fuel = document.getElementById('fuel')?.value; if (fuel) vals.fuel = fuel;
+				const mileage = document.getElementById('mileage')?.value; if (mileage) vals.mileage = mileage;
+				return vals;
+			}
+
+			if (toggleAdvanced) toggleAdvanced.addEventListener('click', toggleAdvancedPanel);
+			if (clearFilters) clearFilters.addEventListener('click', function () { clearAllFilters(); const per = Number(new URLSearchParams(window.location.search).get('perPage') || 12); loadAndRender(1, per); });
+			if (applyFilters) applyFilters.addEventListener('click', function () {
+				const f = collectFilters();
+				updateQueryString(f);
+				// reset to page 1 when applying filters
+				const per = Number(new URLSearchParams(window.location.search).get('perPage') || 12);
+				loadAndRender(1, per);
+			});
+
+			if (searchForm) {
+				searchForm.addEventListener('submit', function (e) {
+					e.preventDefault();
+					const f = collectFilters();
+					updateQueryString(f);
+					const per = Number(new URLSearchParams(window.location.search).get('perPage') || 12);
+					loadAndRender(1, per);
+				});
+			}
+
+			ensureInit();
+		})();
+	</script>
+
+	<script>
+		// Mobile Navigation Toggle (defensive: handles missing elements and adds ARIA support)
+		(function () {
+			const mobileToggle = document.querySelector('.mobile-toggle');
+			const navLinks = document.querySelector('.nav-links');
+
+			if (mobileToggle) {
+				// Make it keyboard accessible if not already
+				if (!mobileToggle.hasAttribute('role')) mobileToggle.setAttribute('role', 'button');
+				if (!mobileToggle.hasAttribute('tabindex')) mobileToggle.setAttribute('tabindex', '0');
+				mobileToggle.setAttribute('aria-label', 'Toggle navigation');
+				// default collapsed
+				mobileToggle.setAttribute('aria-expanded', 'false');
+			}
+
+			function toggleNav() {
+				if (!navLinks || !mobileToggle) return;
+				const isOpen = navLinks.classList.toggle('active');
+				mobileToggle.setAttribute('aria-expanded', String(isOpen));
+			}
+
+			if (mobileToggle && navLinks) {
+				mobileToggle.addEventListener('click', toggleNav);
+				mobileToggle.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						toggleNav();
+					}
+				});
+			}
+
+			// Navbar scroll effect (guarded)
+			window.addEventListener('scroll', () => {
+				const navbar = document.querySelector('.navbar');
+				if (!navbar) return;
+				if (window.scrollY > 50) {
+					navbar.classList.add('scrolled');
+				} else {
+					navbar.classList.remove('scrolled');
+				}
+			});
+
+			// Close mobile menu when clicking on a link
+			const navLinkEls = document.querySelectorAll('.nav-link');
+			if (navLinkEls && navLinks) {
+				navLinkEls.forEach(link => {
+					link.addEventListener('click', () => {
+						navLinks.classList.remove('active');
+						if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
+					});
+				});
+			}
+		})();
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy a Car — Car and Bakkie City Kimberley</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Mobile-only vehicle image sizing: target 432x420 on narrow viewports */
+        @media (max-width: 900px) {
+            .vehicle-card img {
+                width: 432px;
+                height: 420px;
+                max-width: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <div class="brand">
+                    <img src="images/CarandBakkieCityLogo.jpg" alt="Car & Bakkie City logo" class="logo-img">
+                    <span class="logo-subtitle">Kimberley</span>
+                </div>
+            </a>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+            <ul class="nav-links">
+                <li><a href="buy.html" class="nav-link nav-cta">Buy a Car</a></li>
+                <li><a href="sell.html" class="nav-link nav-cta">Sell a Car</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="inventory.html" class="nav-link">Inventory</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <main id="buy" class="section search">
+        <div class="container">
+            <div class="inventory-hero">
+                <h1>Buy a Car</h1>
+                <p>Browse available vehicles or filter by category and preferences. Use the filters to the left to
+                    narrow results.</p>
+            </div>
+
+            <div class="grid" style="grid-template-columns: 1fr; gap:24px; align-items:start;">
+
+                <!-- Results (filters removed) -->
+                <section class="inventory-results">
+                    <div
+                        class="search-container bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-gray-100 mb-4">
+                        <form id="buySearchForm" class="search-form">
+                            <div class="flex gap-3">
+                                <div style="flex:1">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <input id="q" name="query" type="search" placeholder="Search make, model or keyword"
+                                        class="search-input w-full px-4 py-3 bg-white border border-gray-200 text-gray-900 placeholder-gray-500 rounded-lg focus:border-red-500" />
+                                </div>
+                                <div>
+                                    <button type="submit"
+                                        class="btn px-6 py-3 bg-red-600 text-white hover:bg-red-700 transition-colors rounded-lg font-medium">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <span id="fetchStatus" class="fetch-status">Loading inventory...</span>
+                        <div id="progressWrap" class="progress-wrap progress-hidden" aria-hidden="true">
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                                aria-valuenow="0">
+                                <div id="progressFill" class="progress-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="vehicleGrid" class="vehicle-grid" aria-live="polite"></div>
+                    <nav id="pagination" class="pagination mt-6 flex items-center justify-center gap-3"
+                        aria-label="Pagination"></nav>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" style="background:#000;color:#fff;">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Car and Bakkie City Kimberley</h3>
+                    <p>Your trusted partner for quality pre-owned vehicles with transparent pricing and exceptional
+                        service.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="inventory.html">Inventory</a></li>
+
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="terms-of-use.html">Terms of Use</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Vehicle Sales</a></li>
+                        <li><a href="#">Financing through Capitec Bank</a></li>
+                        <li><a href="#">Vehicle Inspection</a></li>
+                        <li><a href="#">Trade-In</a></li>
+                        <li><a href="#">After Sales Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Headquarters/Main Address: 4-10 Hall Street(6 Elbow
+                            Street), Kimberley</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+27785029113">+27 78 502 9113</a></li>
+                        <li><i class="fas fa-envelope"></i> Zakariya — <a
+                                href="mailto:zakariya@carandbakkiecity.co.za">zakariya@carandbakkiecity.co.za</a></li>
+                        <li><i class="fas fa-envelope"></i> Ebrahim — <a
+                                href="mailto:ebrahim@carandbakkiecity.co.za">ebrahim@carandbakkiecity.co.za</a></li>
+                        <li><i class="fas fa-envelope"></i> Jaun — <a
+                                href="mailto:jaun@carandbakkiecity.co.za">jaun@carandbakkiecity.co.za</a></li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 9am-7pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025/6 KBA Motor Wholesalers. All Rights Reserved. Powered by <a
+                        href="https://randpowerstate.co.za" target="_blank" rel="noopener noreferrer">RANDPOWERSTATE
+                        (PTY) LTD</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Small, safe mobile toggle & navbar helpers copied from index.html
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function () {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Navbar scroll effect (safe guards)
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                window.addEventListener('scroll', function () {
+                    if (window.scrollY > 50) navbar.classList.add('scrolled');
+                    else navbar.classList.remove('scrolled');
+                });
+            }
+
+            // Close mobile menu when clicking a nav link
+            const navLinksList = document.querySelectorAll('.nav-link');
+            if (navLinksList && navLinks) {
+                navLinksList.forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+    <script type="module">
+        import { fetchCars, fetchCarsFiltered, fetchCarsPage } from './connections/supabase_client.js';
+
+        const grid = document.getElementById('vehicleGrid');
+        const fetchStatus = document.getElementById('fetchStatus');
+
+        let _progressTimer = null; let _currentProgress = 0;
+        function showProgress() { const wrap = document.getElementById('progressWrap'); const fill = document.getElementById('progressFill'); if (!wrap || !fill) return; wrap.classList.remove('progress-hidden'); _currentProgress = 0; setProgress(2); clearInterval(_progressTimer); _progressTimer = setInterval(() => { if (_currentProgress < 80) setProgress(_currentProgress + Math.random() * 6 + 2); }, 350); }
+        function setProgress(n) { n = Math.max(0, Math.min(100, Math.round(n))); _currentProgress = n; const fill = document.getElementById('progressFill'); const bar = document.querySelector('.progress-bar'); if (fill) { fill.style.width = n + '%'; if (bar) bar.setAttribute('aria-valuenow', String(n)); } }
+        function hideProgress() { clearInterval(_progressTimer); setProgress(100); setTimeout(() => { const wrap = document.getElementById('progressWrap'); if (wrap) wrap.classList.add('progress-hidden'); setProgress(0); }, 400); }
+
+        function formatPrice(value) { if (value == null || value === '') return ''; const n = Number(value); if (Number.isNaN(n)) return value; return 'R ' + n.toLocaleString(); }
+
+        function createCard(vehicle, detailed = false) {
+            const img = vehicle.main_image_url || (Array.isArray(vehicle.gallery_images) && vehicle.gallery_images[0]) || 'images/CarandBakkieCityLogo.jpg'; const year = vehicle.year || ''; const make = vehicle.make || ''; const model = vehicle.model || ''; const variant = vehicle.variant || ''; const title = [year, make, model, variant].filter(Boolean).join(' '); const engine = vehicle.engine_type || ''; const transmission = vehicle.transmission || ''; const drivetrain = vehicle.drivetrain || ''; const mileage = vehicle.mileage || ''; const metaParts = []; if (engine) metaParts.push(engine); if (transmission) metaParts.push(transmission); if (drivetrain) metaParts.push(drivetrain); if (mileage) metaParts.push((typeof mileage === 'number' ? mileage.toLocaleString() : mileage) + ' km'); const meta = metaParts.join(' • '); const currency = vehicle.currency || 'R'; const priceVal = vehicle.price; const price = (priceVal == null || priceVal === '') ? '' : `${currency} ${Number(priceVal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            const card = document.createElement('div'); card.className = 'vehicle-card'; card.style.cursor = 'pointer'; card.addEventListener('click', (e) => { if (e.target.closest('a') || e.target.closest('button')) return; window.location.href = `vehicle-detail.html?id=${encodeURIComponent(vehicle.id)}`; });
+            card.innerHTML = `
+                <img src="${img}" alt="${title}">
+                <div class="card-body">
+                    <div class="title">${title || 'Vehicle'}</div>
+                    <div class="meta">${meta}</div>
+                    <div class="price">${price}</div>
+                    <div class="actions">
+                        <a href="contact.html?id=${encodeURIComponent(vehicle.id)}" class="btn">Enquire</a>
+                        <a href="vehicle-detail.html?id=${encodeURIComponent(vehicle.id)}" class="btn">Details</a>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        async function loadAndRender(page = 1, perPage = 12) {
+            try {
+                fetchStatus.textContent = 'Loading vehicles...'; showProgress();
+                const params = new URLSearchParams(window.location.search);
+                const filters = {
+                    query: params.get('query') || undefined,
+                    make: params.get('make') || undefined,
+                    model: params.get('model') || undefined,
+                    year: params.get('year') || undefined,
+                    min_price: params.get('min_price') || params.get('minPrice') || undefined,
+                    max_price: params.get('max_price') || params.get('maxPrice') || undefined,
+                    type: params.get('type') || undefined,
+                };
+
+                let vehicles = []; let totalCount = 0; const usePaged = typeof fetchCarsPage === 'function';
+                if (usePaged) { const res = await fetchCarsPage({ filters, page, perPage }); vehicles = res.data || []; totalCount = res.count || 0; }
+                else { const hasAnyFilter = Object.values(filters).some(v => v !== undefined && v !== ''); if (hasAnyFilter) vehicles = await fetchCarsFiltered(filters); else vehicles = await fetchCars(); totalCount = vehicles ? vehicles.length : 0; const start = (page - 1) * perPage; vehicles = (vehicles || []).slice(start, start + perPage); }
+
+                if (!vehicles) { fetchStatus.textContent = 'Failed to fetch vehicles.'; grid.innerHTML = ''; hideProgress(); return; }
+                if (vehicles.length === 0) { fetchStatus.textContent = 'No vehicles found.'; grid.innerHTML = ''; renderPagination(totalCount, page, perPage); hideProgress(); return; }
+
+                fetchStatus.textContent = `${totalCount || vehicles.length} vehicle(s) found.`; grid.innerHTML = '';
+                const isQuery = Boolean(new URLSearchParams(window.location.search).get('query'));
+                grid.classList.toggle('detailed', isQuery);
+                for (const v of vehicles) { grid.appendChild(createCard(v, isQuery)); }
+                renderPagination(totalCount || vehicles.length, page, perPage);
+                hideProgress();
+            } catch (err) { console.error('Failed to load vehicles', err); fetchStatus.textContent = 'Error loading vehicles — see console.'; }
+        }
+
+        function renderPagination(totalCount, currentPage = 1, perPage = 12) { const container = document.getElementById('pagination'); if (!container) return; container.innerHTML = ''; const totalPages = Math.max(1, Math.ceil((totalCount || 0) / perPage)); const prev = document.createElement('button'); prev.className = 'btn'; prev.textContent = 'Prev'; prev.disabled = currentPage <= 1; prev.addEventListener('click', () => changePage(currentPage - 1)); container.appendChild(prev); const info = document.createElement('span'); info.className = 'text-sm text-gray-700 px-2'; info.textContent = `Page ${currentPage} of ${totalPages}`; container.appendChild(info); const next = document.createElement('button'); next.className = 'btn'; next.textContent = 'Next'; next.disabled = currentPage >= totalPages; next.addEventListener('click', () => changePage(currentPage + 1)); container.appendChild(next); const perSelect = document.createElement('select'); perSelect.className = 'form-control ml-4';[6, 12, 24, 48].forEach(n => { const o = document.createElement('option'); o.value = String(n); o.textContent = `${n} / page`; if (n === perPage) o.selected = true; perSelect.appendChild(o); }); perSelect.addEventListener('change', (e) => changePage(1, Number(e.target.value))); container.appendChild(perSelect); }
+
+        function changePage(page, perPage = undefined) { const params = new URLSearchParams(window.location.search); if (perPage) params.set('perPage', String(perPage)); else if (params.get('perPage')) perPage = Number(params.get('perPage')); params.set('page', String(page)); window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`); loadAndRender(page, perPage || Number(params.get('perPage') || 12)); }
+
+        (function init() { const params = new URLSearchParams(window.location.search); const page = Number(params.get('page')) || 1; const perPage = Number(params.get('perPage')) || 12; loadAndRender(page, perPage); })();
+
+        // Wire filters UI
+        (function wireFilters() {
+            const buyClear = document.getElementById('buyClearFilters'); const buyApply = document.getElementById('buyApplyFilters'); const form = document.getElementById('buyFiltersForm'); function clearAll() { form.querySelectorAll('select').forEach(s => s.selectedIndex = 0); const q = document.getElementById('q'); if (q) q.value = ''; }
+            function collect() { const vals = {}; const q = document.getElementById('q')?.value?.trim(); if (q) vals.query = q; const make = document.getElementById('make')?.value; if (make) vals.make = make; const model = document.getElementById('model')?.value; if (model) vals.model = model; const year = document.getElementById('year')?.value; if (year) vals.year = year; const price = document.getElementById('price')?.value; if (price) vals.max_price = price; const type = document.getElementById('type')?.value; if (type) vals.type = type; return vals; }
+            buyClear && buyClear.addEventListener('click', () => { clearAll(); const per = Number(new URLSearchParams(window.location.search).get('perPage') || 12); loadAndRender(1, per); });
+            buyApply && buyApply.addEventListener('click', () => { const f = collect(); const url = new URL(window.location.href); Object.keys(f).forEach(k => { if (f[k] === undefined || f[k] === '') url.searchParams.delete(k); else url.searchParams.set(k, f[k]); }); url.searchParams.set('page', '1'); window.history.replaceState({}, '', url.toString()); const per = Number(new URLSearchParams(window.location.search).get('perPage') || 12); loadAndRender(1, per); });
+        })();
+    </script>
+</body>
+
+</html>

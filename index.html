@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Car and Bakkie City</title>
+  <meta name="description"
+    content="Car & Bakkie City Motors has over 20 years experience in selling quality, reliable vehicles. WE wholesale direct to the public ... with over a thousand cars to choose from.">
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Car and Bakkie City">
+  <meta property="og:url" content="/">
+  <meta property="og:title" content="Car and Bakkie City">
+  <meta property="og:type" content="website">
+  <meta property="og:description"
+    content="Car & Bakkie City Motors has over 20 years experience in selling quality, reliable vehicles.">
+  <meta property="og:image" content="images/CarandBakkieCityLogo.jpg">
+  <meta property="og:image:secure_url" content="images/CarandBakkieCityLogo.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="628">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Car and Bakkie City">
+  <meta name="twitter:description"
+    content="Car & Bakkie City Motors has over 20 years experience in selling quality, reliable vehicles.">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="index.css">
+  <!-- Preconnect to Supabase image host for faster image loads -->
+  <link rel="preconnect" href="https://sgrxsnmewjlhxtdhnnsh.supabase.co" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Styles -->
+  <style>
+    :root {
+      --color-primary: 241, 89, 42;
+      --color-secondary: 248, 239, 36;
+      --color-dark: 27, 27, 27;
+      --color-light: 255, 255, 255;
+      --color-text: 64, 64, 64;
+
+      --page-width: 158rem;
+      --spacing-base: 2rem;
+
+      --font-family: 'Inter', sans-serif;
+      --font-weight-normal: 400;
+      --font-weight-medium: 600;
+      --font-weight-bold: 700;
+    }
+
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      line-height: 1.6;
+      color: rgb(var(--color-text));
+    }
+
+    .container {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-base);
+    }
+
+    /* Header Styles */
+    .header {
+      background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%) !important;
+      color: #fff !important;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      height: 72px;
+    }
+
+    .head-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .header-heading img {
+      width: 240px;
+      height: auto;
+    }
+
+    /* Navbar from inventory.html (keeps desktop+mobile behavior consistent) */
+    .navbar {
+      background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      position: sticky;
+      top: 0;
+      z-index: 60;
+    }
+
+    .navbar .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      max-width: 1200px;
+      margin: 0 auto
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .navbar .logo .logo-img {
+      height: 46px;
+      width: auto;
+      border-radius: 6px
+    }
+
+    .navbar .logo .logo-subtitle {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      list-style: none
+    }
+
+    .nav-links li {
+      list-style: none
+    }
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: inline-block
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.08)
+    }
+
+    .nav-cta {
+      background: #fff;
+      color: #b91c1c;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700
+    }
+
+    .nav-cta:hover {
+      background: #ffecec
+    }
+
+    .mobile-toggle {
+      display: none;
+      color: #fff;
+      cursor: pointer
+    }
+
+    @media(max-width:900px) {
+      .nav-links {
+        display: none
+      }
+
+      .mobile-toggle {
+        display: block
+      }
+
+      .navbar .logo .logo-img {
+        height: 40px
+      }
+    }
+
+    .navigation-main {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .navigation-item a {
+      color: #fff !important;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .navigation-item a:hover {
+      opacity: 0.8;
+    }
+
+    .navigation-item a[href*="buy.html"],
+    .navigation-item a[href*="sell.html"] {
+      background: #fff !important;
+      color: #b91c1c !important;
+      border-radius: 8px !important;
+    }
+
+    /* Main Content */
+    .main {
+      margin-top: 72px;
+    }
+
+    /* Hero Section */
+    .slideshow {
+      min-height: calc(100vh - 72px);
+      position: relative;
+    }
+
+    .slideshow-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Category Tabs */
+    .tab-menu {
+      background: rgb(var(--color-dark));
+      padding: 1.6rem 0;
+      /* increased vertical padding for prominence */
+    }
+
+    .tab-menu-list {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-menu-list a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.65rem 1.2rem;
+      /* bigger touch targets */
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      transition: background-color 0.2s ease, transform 0.12s ease;
+    }
+
+    .tab-menu-list a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Product Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem 0;
+    }
+
+    /* Featured vehicles: animate one card at a time */
+    #featured-vehicles .grid-item,
+    #new-deals .grid-item {
+      transition: opacity 420ms ease, transform 420ms ease;
+      will-change: opacity, transform;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #featured-vehicles .grid-item.fade-out,
+    #new-deals .grid-item.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    #featured-vehicles .grid-item.fade-in,
+    #new-deals .grid-item.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .grid-item {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .grid-item:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-media img {
+      width: 100%;
+      height: 240px;
+      /* larger images for category cards */
+      object-fit: cover;
+      /* preserve aspect ratio and reserve layout space to avoid CLS */
+      aspect-ratio: 16/9;
+      display: block;
+    }
+
+    /* Mobile adjustments: smaller card images and tighter gaps */
+    @media (max-width: 900px) {
+      .card-media img {
+        height: 160px;
+      }
+
+      .grid {
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+      }
+
+      /* mobile nav: show expanded vertical menu when toggled */
+      .nav-links.active {
+        display: flex;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 1200;
+      }
+
+      .nav-links.active .nav-link {
+        display: block;
+        padding: 10px 12px;
+      }
+
+      /* hero search overlay: stack inputs vertically on small screens */
+      .search-overlay {
+        top: 8% !important;
+        align-items: flex-start;
+        padding: 0 12px;
+      }
+
+      .search-overlay form {
+        max-width: calc(100% - 24px);
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .search-overlay form .btn,
+      .search-overlay form a.btn {
+        width: 100%;
+      }
+
+      .slideshow-media-desktop-img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        display: block;
+      }
+    }
+
+    /* On very small screens move the hero search out of the image overlay so the image is fully visible */
+    @media (max-width: 640px) {
+      .search-overlay {
+        position: static !important;
+        inset: auto !important;
+        pointer-events: auto !important;
+        margin-top: 8px;
+        padding: 0 12px;
+      }
+
+      /* ensure the hero image is visible and not covered */
+      .slideshow-media {
+        display: block;
+      }
+
+      .slideshow-media-desktop-img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      /* hide the New Wheels, New Deals section on small screens to reduce vertical length */
+      .section-new-deals {
+        display: none !important;
+      }
+    }
+
+    /* Increase featured vehicle card sizes specifically on mobile for better legibility */
+    @media (max-width: 640px) {
+
+      /* allow portrait images more vertical room; use a viewport-based cap so it scales
+         on a variety of handset sizes. Center portrait photos on a light background so
+         they display nicely without awkward cropping. */
+      #featured-vehicles .card-media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fafafa;
+      }
+
+      #featured-vehicles .card-media img {
+        /* explicit size requested: 439px by 420px; keep max-width so it scales down on narrow screens */
+        width: 439px;
+        height: 420px;
+        max-width: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* ensure each featured card has enough vertical space for image + details */
+      #featured-vehicles .grid-item {
+        min-height: 360px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #featured-vehicles .card-info {
+        padding: 12px;
+      }
+
+      #featured-vehicles .card-heading {
+        font-size: 1.05rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card-media img {
+        height: 120px;
+      }
+
+      /* slightly reduce featured sizes on very small screens but keep portrait room */
+      #featured-vehicles .card-media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fafafa;
+      }
+
+      #featured-vehicles .card-media img {
+        /* explicit size requested but still allow scaling down on very small screens */
+        width: 439px;
+        height: 420px;
+        max-width: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      #featured-vehicles .grid-item {
+        min-height: 300px;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+      }
+
+      .container {
+        padding: 0 12px;
+      }
+
+      .head-row {
+        padding: 0.6rem 0;
+      }
+    }
+
+    .card-info {
+      padding: 1rem;
+    }
+
+    .card-heading {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      /* slightly larger headings */
+    }
+
+    .custom-meta-div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+
+    .custom-meta {
+      background: #f5f5f5;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .card-footer {
+      padding: 1rem;
+      border-top: 1px solid #eee;
+    }
+
+    .price {
+      font-weight: var(--font-weight-bold);
+      font-size: 1.2rem;
+      color: rgb(var(--color-dark));
+    }
+
+    /* Features Grid (improved card layout) */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      padding: 3rem 0;
+      align-items: start;
+    }
+
+    /* Categories grid: show 6 small cards in one row on wide screens */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      /* 6 across */
+      gap: 0.9rem;
+      /* tighter gap to fit all cards */
+      align-items: stretch;
+    }
+
+    /* Category card image explicit size: 432x420 while remaining responsive */
+    .categories-grid .card-media img {
+      width: 432px;
+      height: 420px;
+      max-width: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .categories-grid .grid-item {
+      /* ensure the grid item can contain the image and info area */
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .categories-grid .card-info {
+      padding: 0.9rem;
+      margin-top: auto;
+      /* push CTA to bottom for consistent card height */
+    }
+
+    .categories-grid .card-heading {
+      font-size: 1.12rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .categories-grid .btn {
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+    }
+
+    /* Responsive fallbacks: 4 cols under very wide screens, 3/2/1 as screen narrows */
+    @media (max-width: 1400px) {
+      .categories-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 1099px) {
+      .categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: rgb(var(--color-dark));
+      /* dark card */
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 220ms cubic-bezier(.2, .9, .3, 1), box-shadow 220ms ease, background-color 220ms ease, border-color 220ms ease;
+      text-align: center;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      color: #fff;
+    }
+
+    .feature-card:hover,
+    .feature-card:focus-within {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(180deg, rgba(27, 27, 27, 0.98), rgba(34, 34, 34, 0.98));
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      font-size: 22px;
+      flex-shrink: 0;
+      transition: background-color 220ms ease, transform 220ms ease, color 220ms ease;
+    }
+
+    .feature-card:hover .feature-icon,
+    .feature-card:focus-within .feature-icon {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+      color: #111;
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      font-size: 1.12rem;
+      color: #fff;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.4;
+    }
+
+    /* Footer (optimized) */
+    .footer {
+      background: #030303;
+      color: #fff;
+      padding: 2rem 0 1.25rem 0;
+      margin-top: 2.5rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    /* Use a slightly tighter grid and clearer columns on larger screens */
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem 2rem;
+      align-items: start;
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-base);
+    }
+
+    /* ensure footer columns and links can shrink and wrap long email addresses */
+    .footer-col {
+      min-width: 0;
+      /* allow flex/grid children to shrink */
+    }
+
+    .footer-col a {
+      min-width: 0;
+      /* allow anchor to be narrower than its content box */
+      display: inline-block;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      /* break long words/emails if needed */
+      word-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .footer-col h3 {
+      color: #fff;
+      margin-bottom: 0.6rem;
+      font-size: 1.05rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-col li {
+      margin-bottom: 0.45rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .footer-col a {
+      color: #fff;
+      text-decoration: none;
+      transition: color 150ms ease, opacity 150ms ease;
+    }
+
+    .footer-col a:focus,
+    .footer-col a:hover {
+      color: rgba(255, 255, 255, 0.9);
+      opacity: 0.95;
+      text-decoration: underline;
+    }
+
+    /* smaller icon spacing inside footer rows */
+    .footer-col i.fas {
+      width: 18px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* compact copyright / bottom row */
+    .footer-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* desktop: copyright and attribution on a single line */
+    @media (min-width: 720px) {
+      .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    /* mobile: slightly reduce spacing and make links easier to tap */
+    @media (max-width: 640px) {
+      .footer {
+        padding: 1rem 0 0.75rem 0;
+        font-size: 0.95rem;
+      }
+
+      .footer-container {
+        /* switch to stacked list view on mobile */
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .footer-col h3 {
+        font-size: 1rem;
+      }
+
+      .footer-col li {
+        margin-bottom: 0.6rem;
+      }
+
+      .footer-col a {
+        padding: 6px 4px;
+        display: inline-block;
+      }
+    }
+
+    /* Further mobile footer tweaks: show only Contact Us on small screens */
+    @media (max-width: 640px) {
+
+      /* Hide Brand, Quick Links and Services columns so only Contact Us remains visible */
+      .footer-container .footer-col:nth-child(1),
+      .footer-container .footer-col:nth-child(2),
+      .footer-container .footer-col:nth-child(3) {
+        display: none !important;
+      }
+
+      /* Ensure Contact Us (originally the 4th column) is visible, full-width and first */
+      .footer-container .footer-col:nth-child(4) {
+        display: block !important;
+        order: 1;
+        width: 100%;
+      }
+
+      /* Ensure footer bottom row remains centered under the contact column */
+      .footer-bottom {
+        width: 100%;
+      }
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .header {
+        height: 64px;
+      }
+
+      .main {
+        margin-top: 64px;
+      }
+
+      .navigation-main {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Utility Classes */
+    .text-center {
+      text-align: center;
+    }
+
+    .section-title {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 2rem;
+      color: rgb(var(--color-dark));
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: rgb(var(--color-primary));
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: var(--font-weight-medium);
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background: rgba(var(--color-primary), 0.9);
+    }
+  </style>
+</head>
+
+<body class="template-index setting-buttons-solid hero-nav">
+  <!-- Navbar (shared) -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <div class="brand">
+          <img src="images/CarandBakkieCityLogo.jpg" alt="Car & Bakkie City logo" class="logo-img">
+          <span class="logo-subtitle">Kimberley</span>
+        </div>
+      </a>
+      <div class="mobile-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <ul class="nav-links">
+        <li><a href="buy.html" class="nav-link nav-cta">Buy a Car</a></li>
+        <li><a href="sell.html" class="nav-link nav-cta">Sell a Car</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="inventory.html" class="nav-link">Inventory</a></li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Hero Slideshow -->
+    <section class="slideshow">
+      <div class="slideshow-media relative">
+        <a href="inventory.html">
+          <img src="images/car-hero.jpg" alt="Car and Bakkie City hero" class="slideshow-media-desktop-img">
+        </a>
+
+        <!-- Search overlay placed on top of the hero image -->
+        <div class="container absolute inset-0 flex items-center justify-center pointer-events-none search-overlay"
+          style="top:10%;">
+          <form id="hero-search-form"
+            class="w-full max-w-3xl bg-white/95 rounded-xl shadow-lg p-4 flex gap-3 items-center pointer-events-auto"
+            role="search">
+            <label for="hero-search-input" class="sr-only">Search vehicles</label>
+            <input id="hero-search-input" name="q" type="search"
+              placeholder="Search by make, model, year or variant (e.g. Toyota Corolla 2018)"
+              class="flex-1 px-4 py-3 rounded-md border border-gray-200" />
+            <button id="hero-search-btn" type="submit" class="btn">Search</button>
+            <a id="hero-view-inventory" class="btn" href="inventory.html"
+              style="background:#fff;color:#b91c1c;border:1px solid rgba(0,0,0,0.06);">View Inventory</a>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search results (populated after a user searches) -->
+    <section class="container mt-6" id="search-results-section" aria-live="polite" style="display:none;">
+      <h2 class="section-title">Search results</h2>
+      <div id="search-results" class="grid"></div>
+      <div id="search-empty" class="text-center text-gray-600 mt-4" style="display:none;">No vehicles found matching
+        your search.</div>
+    </section>
+
+    <!-- Category Tabs -->
+    <div class="tab-menu">
+      <div class="container">
+        <ul class="tab-menu-list">
+          <li><a href="inventory.html?category=sedan">Sedan</a></li>
+          <li><a href="inventory.html?category=hatchback">Hatchback</a></li>
+          <li><a href="inventory.html?category=suv">SUV</a></li>
+          <li><a href="inventory.html?category=minibus">Minibus</a></li>
+          <li><a href="inventory.html?category=bakkie">Bakkie</a></li>
+          <li><a href="inventory.html?category=commercial">Commercial</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Featured Vehicles -->
+    <section class="container">
+      <h2 class="section-title">Featured Vehicles</h2>
+      <div class="grid" id="featured-vehicles">
+        <!-- Vehicles will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- New Wheels, New Deals -->
+    <section class="container section-new-deals">
+      <h2 class="section-title">New Wheels, New Deals</h2>
+      <div class="grid" id="new-deals">
+        <!-- New deals will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- TikTok embeds under New Wheels, New Deals -->
+    <section class="container">
+      <h2 class="section-title">From Our TikTok</h2>
+      <div class="tiktok-grid"
+        style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;align-items:start;">
+        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@car.bakkie.city/video/7578077240827710741"
+          data-video-id="7578077240827710741" style="max-width: 605px;min-width: 325px;">
+          <section> <a target="_blank" title="@car.bakkie.city"
+              href="https://www.tiktok.com/@car.bakkie.city?refer=embed">@car.bakkie.city</a> Introducing the Mercedes
+            Benz ML320 for only R169,999 <a title="fyp" target="_blank"
+              href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a> <a title="cars" target="_blank"
+              href="https://www.tiktok.com/tag/cars?refer=embed">#cars</a> <a title="kimberley" target="_blank"
+              href="https://www.tiktok.com/tag/kimberley?refer=embed">#kimberley</a> <a title="carandbakkiecity"
+              target="_blank" href="https://www.tiktok.com/tag/carandbakkiecity?refer=embed">#carandbakkiecity</a> <a
+              title="mercedesbenz" target="_blank"
+              href="https://www.tiktok.com/tag/mercedesbenz?refer=embed">#mercedesbenz</a> <a target="_blank"
+              title="♬ original sound - Car &#38; Bakkie City"
+              href="https://www.tiktok.com/music/original-sound-7578077276747909895?refer=embed">♬ original sound - Car
+              &#38; Bakkie City</a> </section>
+        </blockquote>
+
+        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@car.bakkie.city/video/7561747865404443916"
+          data-video-id="7561747865404443916" style="max-width: 605px;min-width: 325px;">
+          <section> <a target="_blank" title="@car.bakkie.city"
+              href="https://www.tiktok.com/@car.bakkie.city?refer=embed">@car.bakkie.city</a> Mzansi&#39;s No. 1, The
+            Toyota Siyaya... Get it today <a title="carandbakkiecity" target="_blank"
+              href="https://www.tiktok.com/tag/carandbakkiecity?refer=embed">#carandbakkiecity</a> <a title="kimberley"
+              target="_blank" href="https://www.tiktok.com/tag/kimberley?refer=embed">#kimberley</a> <a title="fyp"
+              target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a> <a title="toyota"
+              target="_blank" href="https://www.tiktok.com/tag/toyota?refer=embed">#toyota</a> <a target="_blank"
+              title="♬ original sound  - Car &#38; Bakkie City"
+              href="https://www.tiktok.com/music/original-sound-Car-Bakkie-City-7561748000964414220?refer=embed">♬
+              original sound - Car &#38; Bakkie City</a> </section>
+        </blockquote>
+
+        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@car.bakkie.city/video/7577388142328630549"
+          data-video-id="7577388142328630549" style="max-width: 605px;min-width: 325px;">
+          <section> <a target="_blank" title="@car.bakkie.city"
+              href="https://www.tiktok.com/@car.bakkie.city?refer=embed">@car.bakkie.city</a> Matt Black Rims with Wide
+            Tyres <a title="carandbakkiecity" target="_blank"
+              href="https://www.tiktok.com/tag/carandbakkiecity?refer=embed">#carandbakkiecity</a> <a title="kimberley"
+              target="_blank" href="https://www.tiktok.com/tag/kimberley?refer=embed">#kimberley</a> <a title="cars"
+              target="_blank" href="https://www.tiktok.com/tag/cars?refer=embed">#cars</a> <a title="fyp"
+              target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a> <a title="ford" target="_blank"
+              href="https://www.tiktok.com/tag/ford?refer=embed">#ford</a> <a target="_blank"
+              title="♬ original sound - Car &#38; Bakkie City"
+              href="https://www.tiktok.com/music/original-sound-7577388174570179335?refer=embed">♬ original sound - Car
+              &#38; Bakkie City</a> </section>
+        </blockquote>
+
+        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@car.bakkie.city/video/7567401326955531576"
+          data-video-id="7567401326955531576" style="max-width: 605px;min-width: 325px;">
+          <section> <a target="_blank" title="@car.bakkie.city"
+              href="https://www.tiktok.com/@car.bakkie.city?refer=embed">@car.bakkie.city</a> The Isuzu KB280, a
+            legendar workhorse, tested through time <a title="carandbakkiecity" target="_blank"
+              href="https://www.tiktok.com/tag/carandbakkiecity?refer=embed">#carandbakkiecity</a> <a title="kimberley"
+              target="_blank" href="https://www.tiktok.com/tag/kimberley?refer=embed">#kimberley</a> <a title="fyp"
+              target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a> <a title="isuzu"
+              target="_blank" href="https://www.tiktok.com/tag/isuzu?refer=embed">#isuzu</a> <a target="_blank"
+              title="♬ original sound  - Car &#38; Bakkie City"
+              href="https://www.tiktok.com/music/original-sound-Car-Bakkie-City-7567401339718830904?refer=embed">♬
+              original sound - Car &#38; Bakkie City</a> </section>
+        </blockquote>
+      </div>
+      <!-- single TikTok embed script (loaded once) -->
+      <script async src="https://www.tiktok.com/embed.js"></script>
+    </section>
+
+    <!-- Categories Grid -->
+    <section class="container">
+      <h2 class="section-title">Browse Categories</h2>
+      <div class="grid categories-grid">
+        <div class="grid-item">
+          <div class="card-media">
+            <a href="inventory.html?category=sedan">
+              <img loading="lazy"
+                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/sedan.jpg"
+                alt="Sedan">
+            </a>
+          </div>
+          <div class="card-info">
+            <h3 class="card-heading">Sedan</h3>
+            <a href="inventory.html?category=sedan" class="btn">View Sedans</a>
+          </div>
+        </div>
+
+        <div class="grid-item">
+          <div class="card-media">
+            <a href="inventory.html?category=hatchback">
+              <img loading="lazy"
+                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/hatchback.jpg"
+                alt="Hatchback">
+            </a>
+          </div>
+          <div class="card-info">
+            <h3 class="card-heading">Hatchback</h3>
+            <a href="inventory.html?category=hatchback" class="btn">View Hatchbacks</a>
+          </div>
+        </div>
+
+        <div class="grid-item">
+          <div class="card-media">
+            <a href="inventory.html?category=suv">
+              <img loading="lazy"
+                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/SUV.jpg"
+                alt="SUV">
+            </a>
+          </div>
+          <div class="card-info">
+            <h3 class="card-heading">SUV</h3>
+            <a href="inventory.html?category=suv" class="btn">View SUVs</a>
+          </div>
+        </div>
+
+        <div class="grid-item">
+          <div class="card-media">
+            <a href="inventory.html?category=minibus">
+              <img loading="lazy"
+                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/minibus.jpg"
+                alt="Minibus">
+            </a>
+          </div>
+          <div class="card-info">
+            <h3 class="card-heading">Minibus</h3>
+            <a href="inventory.html?category=minibus" class="btn">View Minibuses</a>
+          </div>
+        </div>
+
+        <div class="grid-item">
+          <div class="card-media">
+            <a href="inventory.html?category=bakkie">
+              <img loading="lazy"
+                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/bakkie.jpg"
+                alt="Bakkie">
+            </a>
+          </div>
+          <div class="card-info">
+            <h3 class="card-heading">Bakkie</h3>
+            <a href="inventory.html?category=bakkie" class="btn">View Bakkies</a>
+          </div>
+        </div>
+
+        <div class="grid-item">
+          <div class="card-media">
+            <a href="inventory.html?category=commercial">
+              <img loading="lazy"
+                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/commercial.jpg"
+                alt="Commercial">
+            </a>
+          </div>
+          <div class="card-info">
+            <h3 class="card-heading">Commercial</h3>
+            <a href="inventory.html?category=commercial" class="btn">View Commercial</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container">
+      <h2 class="section-title">Why Choose Us?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Transparent Pricing</h3>
+          <p>VAT included with no hidden fees</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Mileage Guaranteed</h3>
+          <p>Full refund if mileage is inaccurate</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Free Export Clearance</h3>
+          <p>Easy cross-border sales</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>39 Years Experience</h3>
+          <p>Trusted dealer since 1985</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-col">
+          <h3>Car and Bakkie City</h3>
+          <p>Your trusted partner for quality pre-owned vehicles with transparent pricing and exceptional service.</p>
+        </div>
+
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="inventory.html">Inventory</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Vehicle Sales</a></li>
+            <li><a href="#">Financing through Capitec Bank</a></li>
+            <li><a href="#">Vehicle Inspection</a></li>
+            <li><a href="#">Trade-In</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Contact Us</h3>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> Headquarters/Main Address: 4-10 Hall Street(6 Elbow Street),
+              Kimberley</li>
+            <li><i class="fas fa-phone"></i> <a href="tel:+27785029113">+27 78 502 9113</a></li>
+            <li><i class="fas fa-envelope"></i> Zakariya — <a
+                href="mailto:zakariya@carandbakkiecity.co.za">zakariya@carandbakkiecity.co.za</a></li>
+            <li><i class="fas fa-envelope"></i> Ebrahim — <a
+                href="mailto:ebrahim@carandbakkiecity.co.za">ebrahim@carandbakkiecity.co.za</a></li>
+            <li><i class="fas fa-envelope"></i> Jaun — <a
+                href="mailto:jaun@carandbakkiecity.co.za">jaun@carandbakkiecity.co.za</a></li>
+            <li><i class="fas fa-clock"></i> Mon-Sat: 9am-7pm</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>&copy; 2025/6 KBA Motor Wholesalers. All Rights Reserved. Powered by <a href="https://randpowerstate.co.za"
+            target="_blank" rel="noopener noreferrer">RANDPOWERSTATE (PTY) LTD</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script type="module">
+    // Supabase configuration
+    const SUPABASE_URL = 'https://your-project.supabase.co';
+    const SUPABASE_ANON_KEY = 'your-anon-key';
+
+    // Initialize Supabase client
+    const supabaseClient = {
+      from: (table) => ({
+        select: (columns) => ({
+          limit: (limit) => Promise.resolve({
+            data: generateMockData(limit),
+            error: null
+          })
+        })
+      })
+    };
+
+    // Generate mock data for demonstration
+    function generateMockData(limit) {
+      const vehicles = [];
+      const makes = ['Toyota', 'Ford', 'BMW', 'Mercedes', 'Hyundai', 'Kia'];
+      const models = ['Corolla', 'Ranger', 'X3', 'C-Class', 'Tucson', 'Sportage'];
+      const locations = ['Randfontein', 'Johannesburg', 'Pretoria', 'Cape Town'];
+
+      for (let i = 0; i < limit; i++) {
+        vehicles.push({
+          id: i + 1,
+          year: 2015 + (i % 8),
+          make: makes[i % makes.length],
+          model: models[i % models.length],
+          variant: `${i % 2 === 0 ? 'Automatic' : 'Manual'} ${i % 3 === 0 ? 'Premium' : 'Standard'}`,
+          mileage: (50000 + (i * 15000)),
+          price: (150000 + (i * 25000)),
+          transmission: i % 2 === 0 ? 'Automatic' : 'Manual',
+          location: locations[i % locations.length],
+          main_image_url: `https://picsum.photos/400/300?random=${i + 1}`,
+          gallery_images: [
+            `https://picsum.photos/400/300?random=${i + 1}`,
+            `https://picsum.photos/400/300?random=${i + 101}`
+          ]
+        });
+      }
+      return vehicles;
+    }
+
+    // Format price with R and commas
+    function formatPrice(price) {
+      if (!price) return 'Price on request';
+      return 'R ' + price.toLocaleString();
+    }
+
+    // Format mileage
+    function formatMileage(mileage) {
+      if (!mileage) return '';
+      return mileage.toLocaleString() + ' KM';
+    }
+
+    // Build vehicle card HTML
+    function buildVehicleCard(vehicle) {
+      const title = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.variant || ''}`.trim();
+      const productUrl = `vehicle-detail.html?id=${vehicle.id}`;
+
+      return `
+                <div class="grid-item">
+                    <div class="card-media">
+                        <a href="${productUrl}" class="js-product-link">
+                            <img src="${vehicle.main_image_url}" alt="${title}" class="card-media-image" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-heading">
+                            <a href="${productUrl}" class="js-product-link">${title}</a>
+                        </h3>
+                        <div class="custom-meta-div">
+                            ${vehicle.mileage ? `<div class="custom-meta">${formatMileage(vehicle.mileage)}</div>` : ''}
+                            ${vehicle.transmission ? `<div class="custom-meta">${vehicle.transmission}</div>` : ''}
+                            <div class="custom-meta">
+                                <span class="location-pill-text">${vehicle.location}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">
+                            <span class="price-item price-item-regular">${formatPrice(vehicle.price)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+    }
+
+    // Fetch and display vehicles — replace one card at a time with smooth animation
+    async function loadFeaturedVehicles() {
+      const container = document.getElementById('featured-vehicles');
+      if (!container) return;
+
+      try {
+        // dynamically import the supabase helper module from connections
+        let carsModule = null;
+        try {
+          carsModule = await import('./connections/supabase_client.js');
+        } catch (err) {
+          console.warn('Could not import supabase_client module, falling back to inline client:', err);
+        }
+
+        // fetch cars using the module if available, else fall back to the inline mock client
+        let allVehicles = null;
+        if (carsModule && typeof carsModule.fetchCars === 'function') {
+          allVehicles = await carsModule.fetchCars();
+        } else if (typeof supabaseClient !== 'undefined' && supabaseClient.from) {
+          const resp = await supabaseClient.from('vehicles').select('*').limit(100);
+          allVehicles = resp && resp.data ? resp.data : [];
+        } else {
+          allVehicles = [];
+        }
+
+        if (!allVehicles || allVehicles.length === 0) {
+          container.innerHTML = '<p>No featured vehicles available at the moment.</p>';
+          return;
+        }
+
+        const visibleCount = Math.min(4, allVehicles.length);
+
+        // initial visible indices
+        const visibleIndices = [];
+        for (let i = 0; i < visibleCount; i++) visibleIndices.push(i);
+
+        // if there are no extra vehicles to rotate, just render and return
+        if (allVehicles.length <= visibleCount) {
+          container.innerHTML = visibleIndices.map(i => buildVehicleCard(allVehicles[i])).join('');
+          return;
+        }
+
+        // render initial set
+        container.innerHTML = visibleIndices.map(i => buildVehicleCard(allVehicles[i])).join('');
+
+        // rotation state
+        let nextGlobalIndex = visibleCount % allVehicles.length;
+        let replacePos = 0; // 0..visibleCount-1
+        let rotateInterval = null;
+
+        function replaceOneCard() {
+          const children = container.querySelectorAll('.grid-item');
+          const oldEl = children[replacePos];
+          if (!oldEl) return;
+
+          // fade out the old card
+          oldEl.classList.add('fade-out');
+
+          // after the fade-out, replace the card and fade-in
+          setTimeout(() => {
+            const newVehicle = allVehicles[nextGlobalIndex];
+            try {
+              // replace the whole grid-item
+              oldEl.outerHTML = buildVehicleCard(newVehicle);
+            } catch (err) {
+              console.error('Error replacing card HTML:', err);
+            }
+
+            // update bookkeeping
+            visibleIndices[replacePos] = nextGlobalIndex;
+            nextGlobalIndex = (nextGlobalIndex + 1) % allVehicles.length;
+
+            // add fade-in to the newly inserted element
+            const newChildren = container.querySelectorAll('.grid-item');
+            const newEl = newChildren[replacePos];
+            if (newEl) {
+              newEl.classList.add('fade-in');
+              // remove fade-in after animation
+              setTimeout(() => newEl.classList.remove('fade-in'), 500);
+            }
+
+            // advance replace position
+            replacePos = (replacePos + 1) % visibleCount;
+          }, 420); // matches CSS transition
+        }
+
+        function startRotation() {
+          stopRotation();
+          rotateInterval = setInterval(replaceOneCard, 4500);
+        }
+
+        function stopRotation() {
+          if (rotateInterval) { clearInterval(rotateInterval); rotateInterval = null; }
+        }
+
+        // pause on hover/focus
+        container.addEventListener('mouseenter', stopRotation);
+        container.addEventListener('mouseleave', startRotation);
+
+        // initial autostart
+        startRotation();
+
+        // expose for debugging
+        container.__featuredIndices = visibleIndices;
+      } catch (error) {
+        console.error('Error loading featured vehicles:', error);
+        container.innerHTML = '<p>Error loading featured vehicles.</p>';
+      }
+    }
+
+    // Load and display the 'New Wheels, New Deals' images with the same rotation animation as Featured Vehicles
+    function buildImageCard(src, alt = '') {
+      return `
+                <div class="grid-item">
+                    <div class="card-media">
+                        <img src="${src}" alt="${alt}" class="card-media-image" loading="lazy">
+                    </div>
+                </div>
+            `;
+    }
+
+    function loadNewDeals() {
+      // explicit list of image URLs provided
+      const images = [
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/1.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/10.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/11.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/18.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/18.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/5.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/7.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/8.jpg',
+        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/9.jpg'
+      ];
+
+      const container = document.getElementById('new-deals');
+      if (!container) return;
+
+      // remove duplicate URLs while preserving order so the same image
+      // cannot appear more than once in the visible set at the same time
+      const allItems = images.filter((v, i, a) => a.indexOf(v) === i);
+      if (allItems.length === 0) {
+        container.innerHTML = '<p>No deals available.</p>';
+        return;
+      }
+
+      const visibleCount = Math.min(4, allItems.length);
+
+      // initial indices
+      const visibleIndices = [];
+      for (let i = 0; i < visibleCount; i++) visibleIndices.push(i);
+
+      // If no rotation needed just render
+      if (allItems.length <= visibleCount) {
+        container.innerHTML = visibleIndices.map(i => buildImageCard(allItems[i])).join('');
+        return;
+      }
+
+      container.innerHTML = visibleIndices.map(i => buildImageCard(allItems[i])).join('');
+
+      let nextGlobalIndex = visibleCount % allItems.length;
+      let replacePos = 0;
+      let rotateInterval = null;
+
+      function replaceOneImage() {
+        const children = container.querySelectorAll('.grid-item');
+        const oldEl = children[replacePos];
+        if (!oldEl) return;
+
+        oldEl.classList.add('fade-out');
+
+        setTimeout(() => {
+          const newSrc = allItems[nextGlobalIndex];
+          try {
+            oldEl.outerHTML = buildImageCard(newSrc);
+          } catch (err) {
+            console.error('Error replacing image HTML:', err);
+          }
+
+          visibleIndices[replacePos] = nextGlobalIndex;
+          nextGlobalIndex = (nextGlobalIndex + 1) % allItems.length;
+
+          const newChildren = container.querySelectorAll('.grid-item');
+          const newEl = newChildren[replacePos];
+          if (newEl) {
+            newEl.classList.add('fade-in');
+            setTimeout(() => newEl.classList.remove('fade-in'), 500);
+          }
+
+          replacePos = (replacePos + 1) % visibleCount;
+        }, 420);
+      }
+
+      function startRotation() {
+        stopRotation();
+        rotateInterval = setInterval(replaceOneImage, 4500);
+      }
+
+      function stopRotation() {
+        if (rotateInterval) { clearInterval(rotateInterval); rotateInterval = null; }
+      }
+
+      container.addEventListener('mouseenter', stopRotation);
+      container.addEventListener('mouseleave', startRotation);
+
+      startRotation();
+
+      container.__newDealIndices = visibleIndices;
+    }
+
+    // --- Search support: query Supabase and render results ---
+    async function performSearch(query) {
+      const resultsContainer = document.getElementById('search-results');
+      const resultsSection = document.getElementById('search-results-section');
+      const emptyMsg = document.getElementById('search-empty');
+
+      if (!query || !query.trim()) {
+        if (resultsSection) resultsSection.style.display = 'none';
+        return [];
+      }
+
+      try {
+        let carsModule = null;
+        try {
+          carsModule = await import('./connections/supabase_client.js');
+        } catch (err) {
+          console.warn('Could not import supabase_client module for search, falling back to inline client:', err);
+        }
+
+        let vehicles = null;
+        if (carsModule && typeof carsModule.fetchCarsFiltered === 'function') {
+          vehicles = await carsModule.fetchCarsFiltered({ query });
+        } else if (typeof supabaseClient !== 'undefined' && supabaseClient.from) {
+          const resp = await supabaseClient.from('cars').select('*').or(`make.ilike.%${query}%,model.ilike.%${query}%,variant.ilike.%${query}%`).limit(100);
+          vehicles = resp && resp.data ? resp.data : [];
+        } else {
+          vehicles = [];
+        }
+
+        // show results summary only (do not render full cards on index)
+        if (resultsSection) resultsSection.style.display = 'block';
+        if (!vehicles || vehicles.length === 0) {
+          if (resultsContainer) resultsContainer.innerHTML = '';
+          if (emptyMsg) emptyMsg.style.display = 'block';
+          return [];
+        }
+
+        if (emptyMsg) emptyMsg.style.display = 'none';
+
+        // Update the View Inventory link to include the query
+        const viewInventory = document.getElementById('hero-view-inventory');
+        if (viewInventory) {
+          const url = new URL(viewInventory.getAttribute('href'), window.location.href);
+          url.searchParams.set('q', query);
+          viewInventory.setAttribute('href', url.toString());
+        }
+
+        // Build a small summary: found N vehicles + a View results button that navigates to inventory.html?q=...
+        if (resultsContainer) {
+          const safeQ = encodeURIComponent(query);
+          const inventoryHref = `inventory.html?q=${safeQ}`;
+          resultsContainer.innerHTML = `
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+              <div class="text-lg font-semibold">Found ${vehicles.length} vehicle${vehicles.length === 1 ? '' : 's'}</div>
+              <div class="mt-3">
+                <a id="search-view-results-btn" class="btn" href="${inventoryHref}">View results</a>
+              </div>
+            </div>
+          `;
+        }
+
+        return vehicles;
+      } catch (err) {
+        console.error('Search error:', err);
+        return [];
+      }
+    }
+
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+      loadFeaturedVehicles();
+      loadNewDeals();
+
+      // Wire up hero search form
+      const heroForm = document.getElementById('hero-search-form');
+      const heroInput = document.getElementById('hero-search-input');
+      const resultsSection = document.getElementById('search-results-section');
+      const resultsContainer = document.getElementById('search-results');
+      const emptyMsg = document.getElementById('search-empty');
+
+      if (heroForm && heroInput) {
+        const heroBtn = document.getElementById('hero-search-btn');
+        let debounceTimer = null;
+
+        async function setButtonForQuery(q, vehicles) {
+          if (!heroBtn) return;
+          if (vehicles && vehicles.length > 0) {
+            // change to View Results and navigate to inventory with query when clicked
+            heroBtn.textContent = 'View Results';
+            heroBtn.type = 'button';
+            const href = `inventory.html?q=${encodeURIComponent(q)}`;
+            heroBtn.dataset.viewHref = href;
+            heroBtn.onclick = () => { window.location.href = href; };
+          } else {
+            // reset to Search
+            heroBtn.textContent = 'Search';
+            heroBtn.type = 'submit';
+            heroBtn.onclick = null;
+            delete heroBtn.dataset.viewHref;
+          }
+        }
+
+        // Move the tab menu directly under the hero search on small screens
+        (function () {
+          const tabMenu = document.querySelector('.tab-menu');
+          const searchOverlay = document.querySelector('.search-overlay');
+          if (!tabMenu || !searchOverlay) return;
+
+          // remember original location so we can move it back
+          const originalParent = tabMenu.parentNode;
+          const originalNext = tabMenu.nextElementSibling;
+
+          function moveTabMenu() {
+            if (window.innerWidth <= 640) {
+              // move if not already moved
+              if (tabMenu.parentNode !== searchOverlay.parentNode || tabMenu.previousElementSibling !== searchOverlay) {
+                searchOverlay.parentNode.insertBefore(tabMenu, searchOverlay.nextElementSibling);
+              }
+            } else {
+              // move back to original place if needed
+              if (tabMenu.parentNode !== originalParent) {
+                if (originalNext) originalParent.insertBefore(tabMenu, originalNext);
+                else originalParent.appendChild(tabMenu);
+              }
+            }
+          }
+
+          // debounce helper
+          let resizeTimer = null;
+          window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(moveTabMenu, 150);
+          });
+
+          // run once on load
+          moveTabMenu();
+        })();
+
+        // Move the Featured Vehicles section up to directly after the tab menu on small screens
+        (function () {
+          const featuredGrid = document.getElementById('featured-vehicles');
+          const tabMenu = document.querySelector('.tab-menu');
+          if (!featuredGrid || !tabMenu) return;
+
+          const featuredSection = featuredGrid.closest('section');
+          if (!featuredSection) return;
+
+          const originalParent = featuredSection.parentNode;
+          const originalNext = featuredSection.nextElementSibling;
+
+          function moveFeatured() {
+            if (window.innerWidth <= 640) {
+              // place featured section immediately after tabMenu
+              if (featuredSection.parentNode !== tabMenu.parentNode || featuredSection.previousElementSibling !== tabMenu) {
+                tabMenu.parentNode.insertBefore(featuredSection, tabMenu.nextElementSibling);
+              }
+            } else {
+              // move back to original location
+              if (featuredSection.parentNode !== originalParent) {
+                if (originalNext) originalParent.insertBefore(featuredSection, originalNext);
+                else originalParent.appendChild(featuredSection);
+              }
+            }
+          }
+
+          let resizeTimerF = null;
+          window.addEventListener('resize', function () {
+            clearTimeout(resizeTimerF);
+            resizeTimerF = setTimeout(moveFeatured, 150);
+          });
+
+          // initial
+          moveFeatured();
+        })();
+
+        heroForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const q = heroInput.value.trim();
+          if (!q) return;
+          // show searching state
+          if (heroBtn) heroBtn.textContent = 'Searching…';
+          if (resultsSection) resultsSection.style.display = 'block';
+          if (resultsContainer) resultsContainer.innerHTML = '<p>Searching…</p>';
+          const vehicles = await performSearch(q);
+          if (!vehicles || vehicles.length === 0) {
+            if (resultsContainer) resultsContainer.innerHTML = '';
+            if (emptyMsg) emptyMsg.style.display = 'block';
+          } else {
+            if (emptyMsg) emptyMsg.style.display = 'none';
+          }
+          await setButtonForQuery(q, vehicles);
+          if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // live suggestions / update button while typing (debounced)
+        heroInput.addEventListener('input', function () {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(async () => {
+            const q = heroInput.value.trim();
+            if (!q) {
+              // reset UI
+              if (resultsSection) resultsSection.style.display = 'none';
+              if (heroBtn) {
+                heroBtn.textContent = 'Search';
+                heroBtn.type = 'submit';
+                heroBtn.onclick = null;
+              }
+              return;
+            }
+            const vehicles = await performSearch(q);
+            await setButtonForQuery(q, vehicles);
+          }, 500);
+        });
+      }
+
+      // Add mobile menu functionality
+      const mobileMenuBtn = document.createElement('button');
+      mobileMenuBtn.className = 'mobile-menu-btn';
+      mobileMenuBtn.innerHTML = '☰';
+      mobileMenuBtn.setAttribute('aria-label', 'Toggle menu');
+
+      const navMain = document.querySelector('.navigation-main');
+      const headerRow = document.querySelector('.head-row');
+
+      if (window.innerWidth <= 768) {
+        headerRow.appendChild(mobileMenuBtn);
+
+        mobileMenuBtn.addEventListener('click', function () {
+          navMain.style.display = navMain.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function (event) {
+          if (!navMain.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+            navMain.style.display = 'none';
+          }
+        });
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', function () {
+      const navMain = document.querySelector('.navigation-main');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (window.innerWidth > 768) {
+        navMain.style.display = 'flex';
+        if (mobileMenuBtn) {
+          mobileMenuBtn.remove();
+        }
+      } else if (window.innerWidth <= 768 && !mobileMenuBtn) {
+        const newMobileMenuBtn = document.createElement('button');
+        newMobileMenuBtn.className = 'mobile-menu-btn';
+        newMobileMenuBtn.innerHTML = '☰';
+        newMobileMenuBtn.setAttribute('aria-label', 'Toggle menu');
+
+        document.querySelector('.head-row').appendChild(newMobileMenuBtn);
+        navMain.style.display = 'none';
+
+        newMobileMenuBtn.addEventListener('click', function () {
+          navMain.style.display = navMain.style.display === 'flex' ? 'none' : 'flex';
+        });
+      }
+    });
+  </script>
+
+  <script>
+    // Small, safe mobile toggle & navbar helpers copied/adapted from inventory page
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileToggle = document.querySelector('.mobile-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      if (mobileToggle && navLinks) {
+        mobileToggle.addEventListener('click', function () {
+          navLinks.classList.toggle('active');
+        });
+      }
+
+      // Navbar scroll effect (safe guards)
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        window.addEventListener('scroll', function () {
+          if (window.scrollY > 50) navbar.classList.add('scrolled');
+          else navbar.classList.remove('scrolled');
+        });
+      }
+
+      // Close mobile menu when clicking a nav link
+      const navLinksList = document.querySelectorAll('.nav-link');
+      if (navLinksList && navLinks) {
+        navLinksList.forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
+      }
+    });
+  </script>
+</body>
+
+</html>

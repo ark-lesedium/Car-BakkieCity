@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vehicle Details — Car and Bakkie City Kimberley</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <!-- Navbar (shared) -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <div class="brand">
+          <img src="images/CarandBakkieCityLogo.jpg" alt="Car & Bakkie City logo" class="logo-img">
+          <span class="logo-subtitle">Kimberley</span>
+        </div>
+      </a>
+      <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+      <ul class="nav-links">
+        <li><a href="buy.html" class="nav-link nav-cta">Buy a Car</a></li>
+        <li><a href="sell.html" class="nav-link nav-cta">Sell a Car</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="inventory.html" class="nav-link">Inventory</a></li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <main class="section">
+    <div class="container">
+      <div id="vehicleDetail" class="vehicle-detail">
+        <!-- Loaded dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (shared) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-col">
+          <h3>Car and Bakkie City Kimberley</h3>
+          <p>Your trusted partner for quality pre-owned vehicles with transparent pricing and exceptional service.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="inventory.html">Inventory</a></li>
+
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Contact Us</h3>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> Headquarters/Main Address: 4-10 Hall Street(6 Elbow Street),
+              Kimberley</li>
+            <li><i class="fas fa-phone"></i> <a href="tel:+27785029113">+27 78 502 9113</a></li>
+            <li><i class="fas fa-envelope"></i> Zakariya — <a
+                href="mailto:zakariya@carandbakkiecity.co.za">zakariya@carandbakkiecity.co.za</a></li>
+            <li><i class="fas fa-envelope"></i> Ebrahim — <a
+                href="mailto:ebrahim@carandbakkiecity.co.za">ebrahim@carandbakkiecity.co.za</a></li>
+            <li><i class="fas fa-envelope"></i> Jaun — <a
+                href="mailto:jaun@carandbakkiecity.co.za">jaun@carandbakkiecity.co.za</a></li>
+            <li><i class="fas fa-clock"></i> Mon-Sat: 9am-7pm</li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025/6 KBA Motor Wholesalers. All Rights Reserved. Powered by <a href="https://randpowerstate.co.za"
+            target="_blank" rel="noopener noreferrer">RANDPOWERSTATE (PTY) LTD</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
+  <script type="module">
+    import { fetchCarById } from './connections/supabase_client.js';
+
+    const container = document.getElementById('vehicleDetail');
+
+    function formatPrice(value, currency) {
+      if (value == null || value === '') return '';
+      const n = Number(value);
+      if (Number.isNaN(n)) return value;
+      const cur = currency || 'R';
+      return `${cur} ${n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    function renderSpecRow(label, value) {
+      if (value == null || value === '') return '';
+      return `<div class="spec-row"><strong>${label}:</strong> <span>${value}</span></div>`;
+    }
+
+    function renderGallery(main, gallery) {
+      const imgs = [];
+      if (main) imgs.push(main);
+      if (Array.isArray(gallery)) imgs.push(...gallery.filter(Boolean));
+      if (imgs.length === 0) return '';
+      const html = imgs.map(src => `<img class="detail-image" src="${src}" />`).join('');
+      return `<div class="gallery">${html}</div>`;
+    }
+
+    async function load() {
+      const id = getIdFromUrl();
+      if (!id) {
+        container.innerHTML = '<p>No vehicle ID provided.</p>';
+        return;
+      }
+
+      const car = await fetchCarById(id);
+      if (!car) {
+        container.innerHTML = '<p>Vehicle not found.</p>';
+        return;
+      }
+
+      const price = formatPrice(car.price, car.currency);
+
+      const html = `
+        <div class="vehicle-detail-grid">
+          <div class="detail-left">
+            ${renderGallery(car.main_image_url, car.gallery_images)}
+          </div>
+          <div class="detail-right">
+            <h1>${[car.year, car.make, car.model, car.variant].filter(Boolean).join(' ')}</h1>
+            <p class="price-large">${price}</p>
+            <p class="availability">${car.availability_status || ''}</p>
+            <div class="specs">
+              ${renderSpecRow('VIN', car.vin)}
+              ${renderSpecRow('Registration', car.registration_number)}
+              ${renderSpecRow('Engine', car.engine_type + (car.engine_size ? (' ' + car.engine_size) : ''))}
+              ${renderSpecRow('Horsepower', car.horsepower)}
+              ${renderSpecRow('Torque', car.torque)}
+              ${renderSpecRow('Transmission', car.transmission)}
+              ${renderSpecRow('Drivetrain', car.drivetrain)}
+              ${renderSpecRow('Fuel consumption (L/100km)', car.fuel_consumption)}
+              ${renderSpecRow('Top speed', car.top_speed)}
+              ${renderSpecRow('Doors', car.doors)}
+              ${renderSpecRow('Seats', car.seats)}
+              ${renderSpecRow('Body type', car.body_type)}
+              ${renderSpecRow('Exterior color', car.color)}
+              ${renderSpecRow('Interior', car.interior_color)}
+              ${renderSpecRow('Air conditioning', car.air_conditioning ? 'Yes' : 'No')}
+              ${renderSpecRow('Sunroof', car.sunroof ? 'Yes' : 'No')}
+              ${renderSpecRow('Notch bars', car.notch_bars ? 'Yes' : 'No')}
+              ${renderSpecRow('Mileage (km)', car.mileage)}
+              ${car.tags && car.tags.length ? `<div class="spec-row"><strong>Tags:</strong> ${car.tags.join(', ')}</div>` : ''}
+            </div>
+
+            <div class="detail-actions">
+              <a class="btn" href="contact.html?id=${encodeURIComponent(car.id)}">Enquire</a>
+              <a class="btn" href="inventory.html">Back to Inventory</a>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    load();
+  </script>
+
+  <style>
+    .vehicle-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .detail-left .detail-image {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      margin-bottom: 8px;
+    }
+
+    .detail-right .price-large {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    .spec-row {
+      margin: 6px 0;
+    }
+
+    .detail-actions {
+      margin-top: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .vehicle-detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    // Mobile Navigation Toggle (shared behavior)
+    const mobileToggle = document.querySelector('.mobile-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (mobileToggle) mobileToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+  </script>
+</body>
+
+</html>

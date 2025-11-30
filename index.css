@@ -1,0 +1,1921 @@
+/* CSS Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --primary: #2c3e50;
+    --accent: #e74c3c;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+    --gray: #95a5a6;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2.5rem;
+    color: var(--primary);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--accent);
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #c0392b;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* transparent so the hero image shows through under the header */
+    background-color: transparent;
+    box-shadow: none;
+    z-index: 1000;
+    padding: 15px 0;
+    transition: all 0.25s ease;
+}
+
+/* When the page is scrolled, the site can add `.scrolled` to make the
+           navbar solid for readability. If you have no JS for that yet, you
+           can add it later; for now the rule is here so behavior is ready. */
+.navbar.scrolled {
+    padding: 10px 0;
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    /* default: black on regular pages */
+}
+
+/* Logo image sizing (responsive) */
+.logo {
+    /* keep as a single flex item in the navbar */
+    display: flex;
+    align-items: center;
+}
+
+/* Brand wrapper to stack image and subtitle */
+.logo .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-img {
+    max-height: 60px;
+    /* default desktop height */
+    width: auto;
+    display: block;
+}
+
+.logo-subtitle {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1;
+}
+
+/* Slightly smaller on tablet */
+@media (max-width: 768px) {
+    .logo-img {
+        max-height: 48px;
+    }
+
+    .logo-subtitle {
+        font-size: 0.85rem;
+    }
+}
+
+/* Small phones */
+@media (max-width: 576px) {
+    .logo-img {
+        max-height: 40px;
+    }
+
+    .logo-subtitle {
+        font-size: 0.8rem;
+    }
+}
+
+.logo span {
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+    color: var(--primary);
+    /* default: black on regular pages */
+}
+
+.nav-link:hover {
+    color: var(--accent);
+}
+
+/* CTA style for emphasized nav items (Buy / Sell) */
+.nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(199, 41, 31, 0.12);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.nav-cta:hover {
+    transform: translateY(-2px);
+    background: #c0392b;
+}
+
+/* Ensure CTA looks good when nav collapses on mobile */
+@media (max-width: 768px) {
+    .nav-cta {
+        display: inline-block;
+        padding: 10px 18px;
+        margin: 6px 0;
+    }
+}
+
+.mobile-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--primary);
+}
+
+/* When the navbar becomes solid on scroll, switch text back to primary */
+.navbar.scrolled .logo,
+.navbar.scrolled .nav-link,
+.navbar.scrolled .mobile-toggle {
+    color: var(--primary);
+}
+
+/* If a page wants the hero to sit flush under the navbar, add `hero-nav` to the <body>
+           (this removes the default top margin used to avoid overlap on non-hero pages). */
+.hero-nav .main {
+    margin-top: 0;
+}
+
+/* Force the slideshow/hero to sit exactly under the fixed navbar (no flexible gap).
+            Use !important to override earlier utility rules that added small margins. */
+.hero-nav .slideshow,
+.hero-nav .slideshow-media {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.hero-nav .slideshow-media img {
+    display: block;
+}
+
+/* Homepage override: when the <body> has .hero-nav, make nav text white so it stands out over the hero background */
+.hero-nav .logo,
+.hero-nav .nav-link,
+.hero-nav .mobile-toggle {
+    color: #fff !important;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/car-hero.jpg') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    /* ensure high contrast over hero image */
+    /* text-shadow removed to keep the title crisp */
+}
+
+/* Explicitly disable shadow for hero title to respect user's request */
+.hero .hero-title {
+    text-shadow: none;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+/* Hero search quick bar */
+.hero-search {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.hero-search-form {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 900px;
+    align-items: center;
+}
+
+.hero-search-form input[type="search"] {
+    flex: 1 1 auto;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(245, 241, 241, 0.18);
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.filters-btn {
+    background: rgba(255, 255, 255, 0.14);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.search-btn-hero {
+    background: var(--accent);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+}
+
+.hero-filters {
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.97);
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.filters-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.hero-search-status {
+    color: #fff;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.hero-results {
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 12px;
+}
+
+.hero-results .vehicle-card {
+    max-width: 320px;
+}
+
+.hero-actions {
+    margin-top: 8px;
+}
+
+/* Ensure hero action buttons have high-contrast text over the image */
+.hero .hero-actions .btn,
+.hero-actions a.btn {
+    color: #ffffff;
+    /* enforce white text for visibility */
+}
+
+/* Make the hero's primary CTA (Browse Inventory) a solid red button so it stands out */
+.hero .hero-actions>a.btn {
+    background: var(--accent);
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(199, 41, 31, 0.12);
+    transition: background 160ms ease, transform 120ms ease;
+}
+
+.hero .hero-actions>a.btn:hover {
+    background: #c0392b;
+    /* slightly darker on hover */
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .hero-search-form {
+        flex-direction: column;
+    }
+
+    .filters-btn {
+        width: 100%;
+    }
+
+    .search-btn-hero {
+        width: 100%;
+    }
+}
+
+/* Slideshow Styles */
+.slideshow-section {
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+
+.slideshow {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.slides {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    position: relative;
+}
+
+.slide .item {
+    flex: 0 0 32%;
+    max-width: 32%;
+}
+
+.slide-item-inner {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(44, 62, 80, 0.06);
+}
+
+.slide-item-inner img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.slide-caption {
+    padding: 12px;
+}
+
+.slide-title {
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+}
+
+.slide-price {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+@media (max-width: 900px) {
+    .slides {
+        height: 260px;
+    }
+
+    .slide .item {
+        flex-basis: 32%;
+        max-width: 32%;
+    }
+
+    .slide-item-inner img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .slides {
+        height: auto;
+    }
+
+    .slide {
+        position: relative;
+        flex-direction: row;
+        gap: 12px;
+        padding: 10px 0;
+        flex-wrap: wrap;
+    }
+
+    .slide .item {
+        flex: 0 0 48%;
+        max-width: 48%;
+    }
+
+    .slide-item-inner img {
+        height: 180px;
+    }
+}
+
+/* Enhanced slideshow overrides (full-bleed slides, overlay, controls) */
+.slideshow-container {
+    position: relative;
+}
+
+.slideshow-container .slides {
+    height: 100%;
+    min-height: 320px;
+}
+
+.slideshow-container .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.slideshow-container .slide.active {
+    opacity: 1;
+    position: absolute;
+}
+
+.vehicle-overlay {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.slide-indicator {
+    transition: all 0.3s ease;
+}
+
+.slide-indicator.active {
+    background-color: #fff;
+    transform: scale(1.2);
+}
+
+@media (min-width: 768px) {
+    .slideshow-container .slides {
+        min-height: 420px;
+    }
+
+    .slideshow-container {
+        height: 500px;
+    }
+}
+
+/* Partner brands marquee */
+/* Partner brands marquee */
+.brands-marquee {
+    overflow: hidden;
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px 8px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0));
+    border-radius: 8px;
+}
+
+.brands-track {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    /* static track: animation removed so logos stay in place */
+    min-width: 0;
+    animation: none;
+    will-change: auto;
+    justify-content: center;
+}
+
+/* No hover animation necessary when static */
+.brand-logo {
+    height: 56px;
+    width: auto;
+    opacity: 0.95;
+    filter: grayscale(100%) contrast(85%);
+    transform-origin: center;
+    transition: filter 180ms ease, transform 220ms ease, opacity 180ms ease;
+    flex: 0 0 auto;
+}
+
+.brand-logo:hover {
+    filter: none;
+    transform: scale(1.08);
+    opacity: 1;
+}
+
+/* Nudge the brands section down so it doesn't overlap or visually cut the featured vehicles */
+.brands-section {
+    margin-top: 48px;
+}
+
+@media (max-width: 768px) {
+    .brands-section {
+        margin-top: 24px;
+    }
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 768px) {
+    .brand-logo {
+        height: 44px;
+    }
+
+    .brands-track {
+        gap: 24px;
+    }
+}
+
+/* About Section */
+.about {
+    background-color: var(--light);
+}
+
+/* Features / Why Buy From Us */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.09);
+}
+
+.feature-icon {
+    font-size: 2.2rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.feature-card h3 {
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+.feature-card p {
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.about-text {
+    flex: 1;
+}
+
+.about-text h2 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.about-text p {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.about-image {
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.about-image img {
+    width: 70%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.about-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Search Section */
+.search {
+    background-color: white;
+}
+
+.search-container {
+    background-color: var(--light);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Inventory page specific styles */
+.inventory-hero {
+    padding: 80px 0 30px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(44, 62, 80, 0.03), rgba(44, 62, 80, 0));
+}
+
+.inventory-hero h1 {
+    font-size: 2.4rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.inventory-hero p {
+    color: #666;
+    margin-bottom: 0;
+}
+
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.vehicle-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(44, 62, 80, 0.06);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(44, 62, 80, 0.12);
+}
+
+.vehicle-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+}
+
+.vehicle-card .card-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1 1 auto;
+}
+
+.vehicle-card .meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.vehicle-card .title {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.05rem;
+}
+
+.vehicle-card .price {
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.vehicle-card .actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.vehicle-card .actions .btn {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 576px) {
+    .vehicle-card img {
+        height: 140px;
+    }
+}
+
+.search-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.form-control {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.search-btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 10px;
+}
+
+/* Testimonials Section */
+.testimonials {
+    background-color: var(--light);
+}
+
+.testimonial-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.testimonial-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px);
+}
+
+.testimonial-text {
+    font-style: italic;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-info h4 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.author-info p {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+/* Vision & Mission Section */
+.vision-mission {
+    background-color: white;
+}
+
+.vm-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+}
+
+.vm-card {
+    text-align: center;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.vm-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.vm-icon {
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.vm-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary);
+}
+
+.vm-card p {
+    color: #555;
+}
+
+/* Footer */
+.footer {
+    background-color: var(--primary);
+    color: white;
+    padding: 60px 0 30px;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-col h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-col h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--accent);
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+    color: var(--accent);
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background-color: var(--accent);
+    transform: translateY(-5px);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Floating WhatsApp button */
+.whatsapp-float {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25D366;
+    /* WhatsApp green */
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    z-index: 2200;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.whatsapp-float:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+.whatsapp-float i {
+    font-size: 22px;
+}
+
+@media (max-width: 480px) {
+    .whatsapp-float {
+        right: 12px;
+        bottom: 12px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .whatsapp-float i {
+        font-size: 18px;
+    }
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+
+    .about-content {
+        flex-direction: column;
+    }
+
+    .about-image {
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-150%);
+        transition: transform 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s;
+        /* make sure the dropdown sits above other content and is interactive when open */
+        z-index: 1200;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        transition-delay: 0s;
+        pointer-events: auto;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .search-container {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .section {
+        padding: 60px 0;
+    }
+}
+
+/* About page — minimalist look */
+.about {
+    background: #ffffff;
+    /* pure white background for a cleaner canvas */
+}
+
+.about .container {
+    padding-top: 28px;
+    padding-bottom: 48px;
+}
+
+/* Minimalist hero variant used on the About page */
+.hero-slim {
+    padding-top: 94px;
+    /* account for fixed navbar */
+    padding-bottom: 28px;
+    background: #ffffff;
+}
+
+.hero-slim .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 12px;
+}
+
+.hero-title {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 6px;
+    font-weight: 700;
+    text-shadow: 0 6px 18px rgb(255, 255, 255);
+}
+
+.hero-slim .lead {
+    color: #555;
+    margin-bottom: 14px;
+}
+
+.hero-actions .btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+}
+
+.hero-actions .btn:first-child {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+}
+
+.hero-actions .btn:last-child {
+    background: transparent;
+    border: 1px solid #e6e6e6;
+    color: var(--primary);
+}
+
+/* Specific override: ensure hero's single Browse Inventory button remains white
+    (it may be both :first-child and :last-child in the hero). */
+.hero .hero-actions .btn:last-child {
+    color: #ffffff;
+}
+
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: none;
+    transition: none;
+    text-align: center;
+}
+
+.stat-card .text-3xl {
+    font-size: 1.9rem;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.team-card {
+    background: #ffffff;
+    padding: 16px 12px;
+    border-radius: 10px;
+    border: 1px solid #f0f0f0;
+    box-shadow: none;
+    text-align: center;
+}
+
+.team-card img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.team-card h4 {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+details[open] {
+    background: linear-gradient(180deg, #ffffff, #fbfbff);
+    border-left: 4px solid var(--accent);
+}
+
+details summary {
+    cursor: pointer;
+}
+
+.cta {
+    background: transparent;
+    padding: 32px 18px;
+    border-radius: 10px;
+    border: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+.cta a {
+    transition: none;
+}
+
+@media (max-width: 768px) {
+    .team-card {
+        padding: 14px;
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .cta {
+        padding: 22px;
+    }
+}
+
+/* Contact page — minimalist, sleek styles */
+.contact {
+    background: linear-gradient(180deg, #ffffff, #fbfcfd);
+    /* compensate for fixed navbar so section title appears below it */
+    padding-top: 120px;
+    padding-bottom: 40px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 32px;
+    align-items: start;
+}
+
+.contact-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 26px;
+    box-shadow: 0 10px 30px rgba(2, 6, 23, 0.04);
+}
+
+.contact-form .form-group {
+    margin-bottom: 14px;
+}
+
+.contact-form label {
+    font-size: 0.85rem;
+    color: var(--primary);
+    margin-bottom: 6px;
+    display: block;
+    font-weight: 600;
+}
+
+.contact-form .form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #e7e9ee;
+    background: transparent;
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.contact-form .form-control:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 6px 24px rgba(231, 76, 60, 0.08);
+}
+
+.contact-form .btn {
+    padding: 10px 22px;
+    border-radius: 10px;
+}
+
+.lead {
+    font-size: 0.98rem;
+}
+
+.muted-link {
+    color: var(--primary);
+    opacity: 0.8;
+    font-size: 0.95rem;
+}
+
+.muted-link:hover {
+    opacity: 1;
+}
+
+.contact-info .info-block p {
+    margin-bottom: 12px;
+    color: var(--primary);
+}
+
+.contact-info .social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(44, 62, 80, 0.04);
+    color: var(--primary);
+    border-radius: 8px;
+}
+
+.contact-info .social a:hover {
+    transform: translateY(-4px);
+    background: var(--accent);
+    color: #fff;
+}
+
+@media (max-width: 1000px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-card {
+        padding: 20px;
+    }
+}
+
+/* Social media cards */
+.social-cards {
+    display: flex;
+    gap: 14px;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.social-card {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fff, #fbfbfd);
+    box-shadow: 0 8px 24px rgba(2, 6, 23, 0.04);
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.social-card i {
+    font-size: 18px;
+    width: 20px;
+}
+
+.social-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 50px rgba(2, 6, 23, 0.08);
+}
+
+/* Branches grid */
+.section-subtitle {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.branches-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.branch-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 12px 30px rgba(2, 6, 23, 0.04);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.branch-card h4 {
+    margin: 0 0 8px 0;
+    color: var(--primary);
+}
+
+.branch-card p {
+    margin: 4px 0;
+    color: var(--gray);
+}
+
+.branch-card a {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.branch-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 60px rgba(2, 6, 23, 0.08);
+}
+
+@media (max-width: 900px) {
+    .branches-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .branches-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .social-cards {
+        justify-content: center;
+    }
+}
+
+/* Gallery uses Tailwind utility classes (break-inside-avoid, md:columns-2).
+   No custom gallery CSS here to preserve the original TailGrids styling. */
+
+/* Layout adjustment: constrain and center main contact area so it fits well */
+.contact>.container {
+    max-width: 980px;
+    /* slightly narrower for better rhythm */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contact-grid {
+    justify-content: center;
+    /* center the two-column layout inside the container */
+}
+
+.contact-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Categories section: make category cards boxier (less rounded) */
+#categories .group {
+    border-radius: 0 !important;
+    /* boxy cards: no rounding */
+    padding: 16px !important;
+    /* increase card padding for a larger feel */
+    box-shadow: 0 12px 40px rgba(44, 62, 80, 0.12);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+#categories .group:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(44, 62, 80, 0.18);
+}
+
+#categories .group .overflow-hidden,
+#categories .group img {
+    border-radius: 0 !important;
+    /* images flush with card corners */
+}
+
+#categories .group .overflow-hidden {
+    height: 190px !important;
+}
+
+#categories .group img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+#categories .group h3 {
+    margin-top: 8px;
+    font-size: 1.05rem;
+}
+
+/* Category icon + meta alignment */
+#categories .category-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+#categories .category-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 0;
+    /* square icon for boxy look */
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    box-shadow: 0 8px 18px rgba(44, 62, 80, 0.12);
+}
+
+/* Slightly bigger icon on larger screens */
+@media (min-width: 900px) {
+    #categories .category-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.25rem;
+    }
+}
+
+
+/* =====================
+       Boxy / Sharp overrides
+       Makes the UI rectangular, reduces rounding and sharpens shadows
+       ===================== */
+:root {
+    --boxy-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+    --boxy-border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Remove rounding everywhere (explicit override) */
+*,
+*::before,
+*::after {
+    border-radius: 0 !important;
+}
+
+/* Make interactive elements feel sharp and responsive */
+.btn,
+.nav-cta,
+.filters-btn,
+.search-btn-hero,
+.hero .hero-actions>a.btn,
+.form-control,
+input[type="search"],
+textarea,
+select,
+.brand-logo,
+.feature-card,
+.vehicle-card,
+.slide-item-inner,
+.testimonial-card,
+.vm-card,
+.contact-card,
+.about-image,
+.team-card,
+.branch-card,
+.social-card,
+.search-container,
+.brands-marquee {
+    box-shadow: var(--boxy-shadow) !important;
+    border: var(--boxy-border) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+/* Reduce exaggerated lifts on hover so edges feel crisp */
+.feature-card:hover,
+.vehicle-card:hover,
+.slide-item-inner:hover,
+.testimonial-card:hover,
+.vm-card:hover,
+.contact-card:hover,
+.team-card:hover,
+.branch-card:hover,
+.social-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Make floating actions non-circular and more rectangular */
+.whatsapp-float {
+    border-radius: 6px !important;
+    width: 56px !important;
+    height: 56px !important;
+}
+
+/* Ensure avatars and icons become square */
+.author-avatar,
+.author-avatar img,
+.team-card img,
+.brand-logo {
+    border-radius: 0 !important;
+}
+
+/* Make the nav call-to-action less pill-like */
+.nav-cta {
+    padding: 8px 12px !important;
+    border-radius: 4px !important;
+}
+
+/* Slightly tighten shadows on navbar for a flatter, sharper header */
+.navbar,
+.nav-links,
+.nav-links.active {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Make section dividers crisper (small solid line) */
+.section-title::after {
+    height: 3px;
+    width: 60px;
+}
+
+/* Slight accessibility tweak: keep contrast on buttons when removing rounding */
+.btn,
+.nav-cta {
+    font-weight: 700;
+}
+
+/* Brand color overrides: make navbar red and footer yellow for Car & Bakkie City */
+:root {
+    --brand-red: 241, 89, 42;
+    /* rgb form to match existing variable usage */
+    --brand-yellow: 248, 239, 36;
+    --brand-yellow-text: 27, 27, 27;
+}
+
+/* Navbar: keep transparent over the hero, but when scrolled make it red */
+.navbar.scrolled {
+    background-color: rgba(var(--brand-red), 1) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Ensure nav text is readable on the red background */
+.navbar.scrolled .logo,
+.navbar.scrolled .nav-link,
+.navbar.scrolled .mobile-toggle,
+.navbar.scrolled .nav-cta {
+    color: #ffffff !important;
+}
+
+.nav-cta {
+    background: rgba(var(--brand-red), 1) !important;
+}
+
+.footer {
+    /* Force black footer across the site (overrides previous yellow) */
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.footer a {
+    color: inherit !important;
+}
+
+.footer .footer-col h3::after {
+    background-color: rgba(var(--brand-red), 1);
+}
+
+/* Small contrast tweak for footer social icons */
+.social-links a {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+.social-links a:hover {
+    background-color: rgba(var(--brand-red), 1);
+    color: #fff;
+}
+
+
+/* Inventory navbar/footer overrides copied from `inventory.html` to provide shared site styles */
+/* Navbar: red gradient, white text */
+.navbar {
+    background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 60;
+}
+
+.navbar .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    max-width: 1200px;
+    margin: 0 auto
+}
+
+.navbar .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.navbar .logo .logo-img {
+    height: 46px;
+    width: auto;
+    border-radius: 6px
+}
+
+.navbar .logo .logo-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem
+}
+
+.nav-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none
+}
+
+.nav-links li {
+    list-style: none
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-block
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.08)
+}
+
+.nav-cta {
+    background: #fff;
+    color: #b91c1c;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 700
+}
+
+.nav-cta:hover {
+    background: #ffecec
+}
+
+.mobile-toggle {
+    display: none;
+    color: #fff;
+    cursor: pointer
+}
+
+@media(max-width:900px) {
+    .nav-links {
+        display: none
+    }
+
+    .mobile-toggle {
+        display: block
+    }
+
+    .navbar .logo .logo-img {
+        height: 40px
+    }
+}
+
+/* Footer: black background with readable white text */
+.footer {
+    background: #000;
+    color: #ffffff;
+    padding: 28px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06)
+}
+
+.footer a {
+    color: inherit;
+    text-decoration: none
+}
+
+.footer a:hover {
+    text-decoration: underline;
+    color: #e5e7eb
+}
+
+.footer .footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px
+}
+
+.footer .footer-col h3 {
+    color: #ffffff;
+    margin-bottom: 8px
+}
+
+/* Small layout polish ported from inventory page */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px
+}
+
+.inventory-hero h1 {
+    margin: 0 0 6px;
+    font-size: 2rem
+}
+
+.inventory-hero p {
+    color: #374151;
+    margin: 0 0 12px
+}
+
+/* Adapter: restyle existing homepage header markup to match inventory navbar styles
+   This targets the Shopify-provided header classes used in `index.html` so we don't
+   need to alter the HTML. */
+.nav-main {
+    /* match inventory navbar visual weight */
+    background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    padding: 10px 0;
+}
+
+.nav-main .navigation-main {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-main .navigation-main li {
+    list-style: none;
+}
+
+.nav-main .navigation-main a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.nav-main .navigation-main a:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Emphasize buy/sell links as CTAs (inventory uses .nav-cta on those links) */
+.nav-main .navigation-main a[href*="buy.html"],
+.nav-main .navigation-main a[href*="sell.html"] {
+    background: #fff;
+    color: #b91c1c;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+/* Mobile: hide the desktop list and show the mobile navigation when small */
+@media (max-width: 900px) {
+    .nav-main .navigation-main {
+        display: none;
+    }
+
+    .navigation-mobile-wrap {
+        display: block;
+    }
+}
+
+/* Keep visual parity for scrolled state if theme adds that class */
+.nav-main.scrolled {
+    background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}

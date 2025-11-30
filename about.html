@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>About — Car and Bakkie City Kimberley | Quality Used Cars</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		/* About page hero (small, local style so we don't edit index.css) */
+		.about-hero {
+			/* full-bleed horizontally while kept inside the page container */
+			width: 100vw;
+			left: 50%;
+			transform: translateX(-50%);
+			height: 220px;
+			background-image: url('images/car-hero.jpg');
+			background-size: cover;
+			background-position: center center;
+			border-radius: 0;
+			/* remove rounding so it reaches the viewport edges */
+			box-shadow: 0 8px 28px rgba(2, 6, 23, 0.08);
+			margin-bottom: 18px;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.about-hero .overlay {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.06));
+		}
+
+		@media (max-width:768px) {
+			.about-hero {
+				height: 140px;
+				border-radius: 8px;
+			}
+		}
+	</style>
+</head>
+
+<body class="bg-white text-gray-800">
+	<!-- Navbar (shared) -->
+	<nav class="navbar">
+		<div class="container nav-container">
+			<a href="index.html" class="logo">
+				<div class="brand">
+					<img src="images/CarandBakkieCityLogo.jpg" alt="Car & Bakkie City logo" class="logo-img">
+					<span class="logo-subtitle">Kimberley</span>
+				</div>
+			</a>
+			<div class="mobile-toggle">
+				<i class="fas fa-bars"></i>
+			</div>
+			<ul class="nav-links">
+				<li><a href="buy.html" class="nav-link nav-cta">Buy a Car</a></li>
+				<li><a href="sell.html" class="nav-link nav-cta">Sell a Car</a></li>
+				<li><a href="contact.html" class="nav-link">Contact</a></li>
+				<li><a href="about.html" class="nav-link">About</a></li>
+				<li><a href="index.html" class="nav-link">Home</a></li>
+				<li><a href="inventory.html" class="nav-link">Inventory</a></li>
+
+			</ul>
+		</div>
+	</nav>
+
+	<!-- Upgraded Hero using the local .about-hero style (keeps image and overlay) -->
+	<header class="about-hero">
+		<div class="overlay"></div>
+		<div class="container mx-auto h-full flex items-center">
+			<div class="text-white text-center w-full py-8">
+				<h1 class="text-3xl sm:text-4xl font-extrabold drop-shadow-lg">About Car &amp; Bakkie City Kimberley
+				</h1>
+				<p class="mt-3 max-w-2xl mx-auto text-sm sm:text-base text-white/90 drop-shadow">Trusted local
+					dealership offering inspected, quality pre-owned vehicles with transparent pricing and people-first
+					service across Kimberley.</p>
+				<div class="mt-6 inline-flex gap-3 justify-center">
+					<a href="inventory.html"
+						class="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-md font-semibold shadow">Browse
+						Inventory</a>
+					<a href="contact.html"
+						class="bg-white/90 hover:bg-white text-gray-800 px-5 py-3 rounded-md font-semibold">Contact
+						Us</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="py-12 about">
+		<div class="container mx-auto px-6">
+			<!-- Intro + Snapshot -->
+			<section class="grid gap-6 lg:grid-cols-3 items-start">
+				<div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+					<h2 class="text-2xl font-bold text-gray-900">Who we are</h2>
+					<p class="mt-3 text-gray-600">Car &amp; Bakkie City Kimberley is a family-minded dealership focused
+						on providing reliable, inspected pre-owned vehicles with straight-forward pricing. We combine
+						local market knowledge with careful inspections so you can buy with confidence.</p>
+
+					<div class="mt-6 grid gap-4 sm:grid-cols-2">
+						<div class="rounded-lg overflow-hidden shadow-sm bg-gray-50 p-4 flex items-start gap-4">
+							<img src="images/20251028_123938.jpg" alt="Kimberley Central"
+								class="w-28 h-20 object-cover rounded" />
+							<div>
+								<div class="font-semibold">Kimberley Central</div>
+								<div class="text-sm text-gray-600">Main showroom & valuations</div>
+							</div>
+						</div>
+						<div class="rounded-lg overflow-hidden shadow-sm bg-gray-50 p-4 flex items-start gap-4">
+							<img src="images/car-hero.jpg" alt="Northside Branch"
+								class="w-28 h-20 object-cover rounded" />
+							<div>
+								<div class="font-semibold">Northside Branch</div>
+								<div class="text-sm text-gray-600">Service & inspections</div>
+							</div>
+						</div>
+						<div class="rounded-lg overflow-hidden shadow-sm bg-gray-50 p-4 flex items-start gap-4">
+							<img src="images/ford-eco-sport.jpg" alt="Outlet" class="w-28 h-20 object-cover rounded" />
+							<div>
+								<div class="font-semibold">Outlet</div>
+								<div class="text-sm text-gray-600">Value buys & trade-ins</div>
+							</div>
+						</div>
+						<div class="rounded-lg overflow-hidden shadow-sm bg-gray-50 p-4 flex items-start gap-4">
+							<div class="w-28 h-20 flex items-center justify-center bg-white rounded">
+								<img src="images/CarandBakkieCityLogo.jpg" alt="Logo" class="h-12 object-contain" />
+							</div>
+							<div>
+								<div class="font-semibold">Local Team</div>
+								<div class="text-sm text-gray-600">Friendly service, community focused</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Mission / Vision / Values -->
+				<aside class="bg-white rounded-lg shadow-sm p-6">
+					<h3 class="text-lg font-semibold">Mission • Vision • Values</h3>
+					<div class="mt-4 space-y-4">
+						<div>
+							<div class="text-red-600 text-xl mb-1"><i class="fas fa-bullseye"></i></div>
+							<div class="font-semibold">Mission</div>
+							<div class="text-sm text-gray-600">Make reliable transportation accessible through inspected
+								pre-owned vehicles and fair pricing.</div>
+						</div>
+						<div>
+							<div class="text-red-600 text-xl mb-1"><i class="fas fa-eye"></i></div>
+							<div class="font-semibold">Vision</div>
+							<div class="text-sm text-gray-600">To be the most trusted local dealership for pre-owned
+								vehicles in the Northern Cape.</div>
+						</div>
+						<div>
+							<div class="text-red-600 text-xl mb-1"><i class="fas fa-handshake"></i></div>
+							<div class="font-semibold">Values</div>
+							<div class="text-sm text-gray-600">Integrity, transparency and people-first service.</div>
+						</div>
+					</div>
+				</aside>
+			</section>
+
+			<!-- Showroom highlights -->
+			<section class="mt-10">
+				<h3 class="text-xl font-semibold text-gray-900">Showroom highlights</h3>
+				<p class="mt-2 text-gray-600">Recent arrivals and staff picks.</p>
+				<div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+					<figure class="bg-white rounded-lg overflow-hidden shadow-sm">
+						<img src="images/20251028_123938.jpg" alt="Showroom car 1" class="w-full h-44 object-cover" />
+						<figcaption class="p-3 text-sm text-gray-700">Well-maintained sedan — inspected & serviced
+						</figcaption>
+					</figure>
+					<figure class="bg-white rounded-lg overflow-hidden shadow-sm">
+						<img src="images/ford-eco-sport.jpg" alt="Showroom car 2" class="w-full h-44 object-cover" />
+						<figcaption class="p-3 text-sm text-gray-700">Popular compact — economical and practical
+						</figcaption>
+					</figure>
+					<figure class="bg-white rounded-lg overflow-hidden shadow-sm">
+						<img src="images/car-hero.jpg" alt="Showroom car 3" class="w-full h-44 object-cover" />
+						<figcaption class="p-3 text-sm text-gray-700">Family-friendly options with service history
+						</figcaption>
+					</figure>
+					<figure class="bg-white rounded-lg overflow-hidden shadow-sm flex items-center justify-center p-6">
+						<img src="images/CarandBakkieCityLogo.jpg" alt="Logo" class="h-20 object-contain" />
+					</figure>
+				</div>
+			</section>
+
+			<!-- FAQ + contact prompt -->
+			<section class="mt-10 grid gap-6 lg:grid-cols-2">
+				<div>
+					<h3 class="text-xl font-semibold text-gray-900">Frequently asked questions</h3>
+					<div class="mt-4 space-y-3">
+						<details class="bg-white border rounded p-4">
+							<summary class="font-medium cursor-pointer">Do you do car finance?</summary>
+							<p class="mt-2 text-gray-600">We sell for cash at our branches. Buyers may arrange finance
+								with their bank; we assist with paperwork and settlement when collecting the vehicle.
+							</p>
+						</details>
+						<details class="bg-white border rounded p-4">
+							<summary class="font-medium cursor-pointer">Do you do rent to own?</summary>
+							<p class="mt-2 text-gray-600">No — we do not offer rent-to-own plans.</p>
+						</details>
+						<details class="bg-white border rounded p-4">
+							<summary class="font-medium cursor-pointer">Do you accept trade-ins?</summary>
+							<p class="mt-2 text-gray-600">Yes. Bring your vehicle for a free appraisal or start with our
+								online form. Values depend on condition and market demand.</p>
+						</details>
+					</div>
+				</div>
+
+				<div class="bg-white rounded-lg shadow-sm p-6 flex flex-col justify-between">
+					<div>
+						<h4 class="text-lg font-semibold">Need help fast?</h4>
+						<p class="mt-2 text-gray-600">Call our valuations team at <strong>(053) 123-4567</strong> or <a
+								href="contact.html" class="text-red-600 font-semibold">contact us online</a> to book an
+							appraisal or test drive.</p>
+					</div>
+					<div class="mt-6 flex gap-3">
+						<a href="inventory.html"
+							class="flex-1 bg-red-600 hover:bg-red-700 text-white text-center px-4 py-3 rounded-md font-semibold">View
+							Inventory</a>
+						<a href="contact.html"
+							class="flex-1 border border-gray-200 text-center px-4 py-3 rounded-md">Contact Sales</a>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<!-- Footer (shared) -->
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-container">
+				<div class="footer-col">
+					<h3>Car and Bakkie City Kimberley</h3>
+					<p>Your trusted partner for quality pre-owned vehicles with transparent pricing and exceptional
+						service.</p>
+					<div class="social-links">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+				<div class="footer-col">
+					<h3>Quick Links</h3>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="about.html">About Us</a></li>
+						<li><a href="inventory.html">Inventory</a></li>
+
+						<li><a href="contact.html">Contact</a></li>
+						<li><a href="privacy-policy.html">Privacy Policy</a></li>
+						<li><a href="terms-of-use.html">Terms of Use</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h3>Services</h3>
+					<ul>
+						<li><a href="#">Vehicle Sales</a></li>
+						<li><a href="#">Financing through Capitec Bank</a></li>
+						<li><a href="#">Vehicle Inspection</a></li>
+						<li><a href="#">Trade-In</a></li>
+						<li><a href="#">After Sales Support</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h3>Contact Us</h3>
+					<ul>
+						<li><i class="fas fa-map-marker-alt"></i> Headquarters/Main Address: 4-10 Hall Street(6 Elbow
+							Street), Kimberley</li>
+						<li><i class="fas fa-phone"></i> <a href="tel:+27785029113">+27 78 502 9113</a></li>
+						<li><i class="fas fa-envelope"></i> Zakariya — <a
+								href="mailto:zakariya@carandbakkiecity.co.za">zakariya@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-envelope"></i> Ebrahim — <a
+								href="mailto:ebrahim@carandbakkiecity.co.za">ebrahim@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-envelope"></i> Jaun — <a
+								href="mailto:jaun@carandbakkiecity.co.za">jaun@carandbakkiecity.co.za</a></li>
+						<li><i class="fas fa-clock"></i> Mon-Sat: 9am-7pm</li>
+					</ul>
+				</div>
+			</div>
+			<div class="copyright">
+				<p>&copy; 2025/6 KBA Motor Wholesalers. All Rights Reserved. Powered by <a
+						href="https://randpowerstate.co.za" target="_blank" rel="noopener noreferrer">RANDPOWERSTATE
+						(PTY) LTD</a></p>
+			</div>
+		</div>
+	</footer>
+
+	<script>
+		// Mobile Navigation Toggle
+		const mobileToggle = document.querySelector('.mobile-toggle');
+		const navLinks = document.querySelector('.nav-links');
+
+		if (mobileToggle) {
+			mobileToggle.addEventListener('click', () => {
+				navLinks.classList.toggle('active');
+			});
+		}
+
+		// Navbar scroll effect
+		window.addEventListener('scroll', () => {
+			const navbar = document.querySelector('.navbar');
+			if (window.scrollY > 50) {
+				navbar.classList.add('scrolled');
+			} else {
+				navbar.classList.remove('scrolled');
+			}
+		});
+
+		// Close mobile menu when clicking on a link
+		document.querySelectorAll('.nav-link').forEach(link => {
+			link.addEventListener('click', () => {
+				navLinks.classList.remove('active');
+			});
+		});
+	</script>
+</body>
+
+</html>

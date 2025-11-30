@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell a Car — Car and Bakkie City Kimberley</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Toast styles (small, self-contained) */
+        .toast-wrap {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 4000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            min-width: 240px;
+            max-width: 420px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.12);
+            transform: translateY(8px);
+            opacity: 0;
+            transition: transform 220ms ease, opacity 220ms ease;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .toast.error {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .toast .icon {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .toast .msg {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .toast button.close {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Small page hero to give context without pushing the form down too far */
+        /* Full-bleed horizontally so it reaches the viewport edges */
+        .page-hero {
+            width: 100vw;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 180px;
+            border-radius: 0;
+            /* full-bleed should not have rounded viewport edges */
+            background-image: url('images/car-hero.jpg');
+            background-size: cover;
+            background-position: center center;
+            box-shadow: 0 8px 30px rgba(2, 6, 23, 0.06);
+            margin-bottom: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.08));
+        }
+
+        @media (max-width: 768px) {
+            .page-hero {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <div class="brand">
+                    <img src="images/CarandBakkieCityLogo.jpg" alt="Car & Bakkie City logo" class="logo-img">
+                    <span class="logo-subtitle">Kimberley</span>
+                </div>
+            </a>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+            <ul class="nav-links">
+                <li><a href="buy.html" class="nav-link nav-cta">Buy a Car</a></li>
+                <li><a href="sell.html" class="nav-link nav-cta">Sell a Car</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="inventory.html" class="nav-link">Inventory</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <main class="section hero-slim" style="padding-top:10px;">
+        <div class="container">
+
+            <h1 class="section-title">Sell a Car</h1>
+            <p class="lead">Complete the form below with your vehicle details and contact information. Our valuations
+                team will review and get back to you with an offer.</p>
+
+            <div class="grid" style="grid-template-columns: 1fr 420px; gap:24px; align-items:start; margin-top:18px;">
+                <section class="bg-white rounded-xl p-6 shadow-sm">
+                    <h2 class="text-xl font-semibold mb-4">Vehicle details</h2>
+                    <form id="sellForm" class="search-container" novalidate action="https://formspree.io/f/mgvpgrko"
+                        method="POST">
+                        <!-- Formspree helper fields -->
+                        <input type="hidden" name="_subject" value="Sell request from website">
+                        <input type="hidden" name="_replyto" id="_replyto" value="">
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div class="form-group">
+                                <label for="ownerName">Your full name</label>
+                                <input id="ownerName" name="owner_name" class="form-control" type="text" required
+                                    placeholder="John Doe">
+                                <small id="err-owner_name" class="muted-link" aria-live="polite"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ownerEmail">Email</label>
+                                <input id="ownerEmail" name="owner_email" class="form-control" type="email" required
+                                    placeholder="you@example.com">
+                                <small id="err-owner_email" class="muted-link" aria-live="polite"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ownerPhone">Phone</label>
+                                <input id="ownerPhone" name="owner_phone" class="form-control" type="tel" required
+                                    placeholder="(053) 555-1234">
+                                <small id="err-owner_phone" class="muted-link" aria-live="polite"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prefContact">Preferred contact</label>
+                                <select id="prefContact" name="contact_pref" class="form-control">
+                                    <option value="phone">Phone</option>
+                                    <option value="email">Email</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="make">Make</label>
+                                <input id="make" name="make" class="form-control" type="text" placeholder="e.g. Toyota">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="model">Model</label>
+                                <input id="model" name="model" class="form-control" type="text"
+                                    placeholder="e.g. Hilux">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="year">Year</label>
+                                <input id="year" name="year" class="form-control" type="number" min="1900" max="2099"
+                                    placeholder="2018">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mileage">Mileage (km)</label>
+                                <input id="mileage" name="mileage" class="form-control" type="number"
+                                    placeholder="120000">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="transmission">Transmission</label>
+                                <select id="transmission" name="transmission" class="form-control select-custom">
+                                    <option value="">Any</option>
+                                    <option value="Automatic">Automatic</option>
+                                    <option value="Manual">Manual</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fuel">Fuel type</label>
+                                <select id="fuel" name="fuel" class="form-control select-custom">
+                                    <option value="">Any</option>
+                                    <option value="Petrol">Petrol</option>
+                                    <option value="Diesel">Diesel</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                    <option value="Electric">Electric</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <label for="askingPrice">Asking price (optional)</label>
+                            <input id="askingPrice" name="asking_price" class="form-control" type="text"
+                                placeholder="e.g. R150 000">
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <label for="notes">Additional notes</label>
+                            <textarea id="notes" name="notes" class="form-control" rows="4"
+                                placeholder="Any known issues, service history, extras..."></textarea>
+                        </div>
+
+                        <!-- Photos removed at user's request -->
+
+                        <div class="form-group mt-6">
+                            <button type="submit" class="btn">Send my vehicle details</button>
+                            <button type="button" id="sellClear" class="btn"
+                                style="background:#f3f3f3;color:#333;margin-left:8px;">Clear</button>
+                        </div>
+
+                        <div id="sellFormStatus" class="mt-4" aria-live="polite"></div>
+                    </form>
+                </section>
+
+                <aside class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4">How we handle submissions</h3>
+                    <p class="text-gray-600">When you submit this form we will receive your vehicle details and contact
+                        you to discuss valuation and collection. Submissions are handled securely and used only for
+                        valuation purposes.</p>
+                    <hr class="my-4">
+                    <h4 class="text-md font-semibold mb-2">Need a faster response?</h4>
+                    <p class="mb-4">Call our valuations team: <strong>(053) 123-4567</strong></p>
+                    <a href="contact.html" class="inline-flex items-center btn">Contact Support</a>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" style="background:#000;color:#fff;">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Car and Bakkie City Kimberley</h3>
+                    <p>Your trusted partner for quality pre-owned vehicles with transparent pricing and exceptional
+                        service.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="inventory.html">Inventory</a></li>
+
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="terms-of-use.html">Terms of Use</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Vehicle Sales</a></li>
+                        <li><a href="#">Financing through Capitec Bank</a></li>
+                        <li><a href="#">Vehicle Inspection</a></li>
+                        <li><a href="#">Trade-In</a></li>
+                        <li><a href="#">After Sales Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Headquarters/Main Address: 4-10 Hall Street(6 Elbow
+                            Street), Kimberley</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+27785029113">+27 78 502 9113</a></li>
+                        <li><i class="fas fa-envelope"></i> Zakariya — <a
+                                href="mailto:zakariya@carandbakkiecity.co.za">zakariya@carandbakkiecity.co.za</a></li>
+                        <li><i class="fas fa-envelope"></i> Ebrahim — <a
+                                href="mailto:ebrahim@carandbakkiecity.co.za">ebrahim@carandbakkiecity.co.za</a></li>
+                        <li><i class="fas fa-envelope"></i> Jaun — <a
+                                href="mailto:jaun@carandbakkiecity.co.za">jaun@carandbakkiecity.co.za</a></li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 9am-7pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025/6 KBA Motor Wholesalers. All Rights Reserved. Powered by <a
+                        href="https://randpowerstate.co.za" target="_blank" rel="noopener noreferrer">RANDPOWERSTATE
+                        (PTY) LTD</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast container -->
+    <div class="toast-wrap" aria-live="polite" aria-atomic="true" id="toastWrap"></div>
+
+    <script>
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        mobileToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+    </script>
+    <script>
+        // Sell form client-side handling
+        (function () {
+            const form = document.getElementById('sellForm');
+            const statusEl = document.getElementById('sellFormStatus');
+            const clearBtn = document.getElementById('sellClear');
+
+            // Toast utility
+            const toastWrap = document.getElementById('toastWrap');
+            function showToast(message, type = 'success', timeout = 5000) {
+                if (!toastWrap) return;
+                const el = document.createElement('div');
+                el.className = `toast ${type}`;
+                el.setAttribute('role', 'status');
+                el.innerHTML = `
+                    <div class="icon">${type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>'}</div>
+                    <div class="msg">${message}</div>
+                    <button class="close" aria-label="Dismiss">&times;</button>
+                `;
+                const closeBtn = el.querySelector('button.close');
+                closeBtn.addEventListener('click', () => { el.classList.remove('show'); setTimeout(() => el.remove(), 220); });
+                toastWrap.appendChild(el);
+                // small delay to allow transition
+                requestAnimationFrame(() => el.classList.add('show'));
+                if (timeout) setTimeout(() => { if (el.parentNode) { el.classList.remove('show'); setTimeout(() => el.remove(), 220); } }, timeout);
+            }
+
+            function validateEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+            function validatePhone(phone) { return /^[-+()\d\s]{7,20}$/.test(phone); }
+
+            function showError(id, msg) { const el = document.getElementById('err-' + id); if (el) el.textContent = msg || ''; }
+
+            async function postSubmission(formEl) {
+                // Post to Formspree endpoint using the form's FormData
+                const endpoint = formEl.getAttribute('action') || 'https://formspree.io/f/mgvpgrko';
+                try {
+                    const fd = new FormData(formEl);
+                    // Ensure subject and replyto are set for easier sorting and replies
+                    const owner = fd.get('owner_name') || 'website';
+                    fd.set('_subject', `Sell request from ${owner}`);
+                    const ownerEmail = fd.get('owner_email');
+                    if (ownerEmail) fd.set('_replyto', ownerEmail);
+
+                    const res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json' },
+                        body: fd
+                    });
+
+                    const json = await res.json().catch(() => null);
+                    if (!res.ok) {
+                        // return structured error so caller can show details
+                        return { ok: false, status: res.status, body: json };
+                    }
+                    return { ok: true, status: res.status, body: json };
+                } catch (err) {
+                    console.error('postSubmission failed', err);
+                    return { ok: false, error: String(err) };
+                }
+            }
+
+            form && form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                statusEl.textContent = '';
+                ['owner_name', 'owner_email', 'owner_phone'].forEach(k => showError(k, ''));
+
+                const data = new FormData(form);
+                const owner_name = (data.get('owner_name') || '').trim();
+                const owner_email = (data.get('owner_email') || '').trim();
+                const owner_phone = (data.get('owner_phone') || '').trim();
+
+                let ok = true;
+                if (!owner_name) { showError('owner_name', 'Please enter your name'); ok = false; }
+                if (!owner_email || !validateEmail(owner_email)) { showError('owner_email', 'Please enter a valid email'); ok = false; }
+                if (!owner_phone || !validatePhone(owner_phone)) { showError('owner_phone', 'Please enter a valid phone'); ok = false; }
+                if (!ok) { statusEl.textContent = 'Please correct the highlighted fields.'; statusEl.style.color = 'crimson'; return; }
+
+                // Submit form to Formspree
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
+                statusEl.textContent = 'Sending...';
+                statusEl.style.color = '#333';
+                const result = await postSubmission(form);
+                if (result && result.ok) {
+                    const msg = 'Thanks — your vehicle details were submitted. We will contact you soon.';
+                    // show toast only; clear inline status (toast is primary feedback)
+                    showToast(msg, 'success');
+                    statusEl.textContent = '';
+                    try { localStorage.setItem('lastSell', JSON.stringify(Object.fromEntries(new FormData(form).entries()))); } catch (e) { }
+                    form.reset();
+                    if (submitBtn) submitBtn.disabled = false;
+                    return;
+                }
+
+                // Show diagnostic information to help debugging
+                if (result) {
+                    console.error('Formspree response error', result);
+                    let msg = 'Submission failed.';
+                    if (result.status) msg += ` Server responded with status ${result.status}.`;
+                    if (result.body && result.body.error) msg += ` ${result.body.error}`;
+                    if (result.error) msg += ` ${result.error}`;
+                    statusEl.innerHTML = `<strong>${msg}</strong> Please try again.`;
+                    showToast(msg, 'error', 8000);
+                } else {
+                    const msg = 'Submission failed. Please try again.';
+                    statusEl.innerHTML = `<strong>${msg}</strong>`;
+                    showToast(msg, 'error', 8000);
+                }
+                statusEl.style.color = 'crimson';
+                if (submitBtn) submitBtn.disabled = false;
+            });
+
+            // Keep _replyto updated for non-JS fallback and clarity
+            const ownerEmailInput = document.getElementById('ownerEmail');
+            const replyHidden = document.getElementById('_replyto');
+            if (ownerEmailInput && replyHidden) {
+                ownerEmailInput.addEventListener('input', () => {
+                    replyHidden.value = ownerEmailInput.value || '';
+                });
+            }
+
+            clearBtn && clearBtn.addEventListener('click', () => { form.reset(); statusEl.textContent = '';['owner_name', 'owner_email', 'owner_phone'].forEach(k => showError(k, '')); if (replyHidden) replyHidden.value = ''; });
+        })();
+    </script>
+</body>
+
+</html>
