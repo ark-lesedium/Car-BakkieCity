@@ -9,6 +9,36 @@
     <link rel="stylesheet" href="index.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Prevent horizontal scroll on mobile */
+        html,
+        body {
+            overflow-x: hidden !important;
+            width: 100%;
+            max-width: 100%;
+            position: relative;
+        }
+
+        /* Ensure all containers respect viewport width */
+        * {
+            box-sizing: border-box;
+        }
+
+        .container,
+        .section,
+        main,
+        .grid,
+        .inventory-results,
+        .search-container,
+        .vehicle-grid {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Prevent any element from exceeding viewport */
+        body>* {
+            max-width: 100vw;
+        }
+
         /* Mobile toggle hamburger menu */
         .mobile-toggle {
             display: none;
@@ -24,12 +54,127 @@
                 display: block;
             }
 
+            /* Force everything to fit */
+            body,
+            html,
+            main,
+            .section,
+            .container,
+            .grid,
+            .inventory-results,
+            .search-container,
+            form,
+            div {
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+            }
+
             .vehicle-card img {
-                width: 432px;
-                height: 420px;
-                max-width: 100%;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
                 object-fit: cover;
                 display: block;
+            }
+
+            /* Ensure container doesn't overflow */
+            .container {
+                width: 100% !important;
+                max-width: 100vw !important;
+                padding: 0 12px !important;
+                margin: 0 auto;
+            }
+
+            /* Remove any negative margins */
+            * {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+
+            .section {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            /* Make search form responsive */
+            .search-form .flex {
+                flex-direction: column;
+                gap: 12px;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .search-form .flex>div {
+                width: 100% !important;
+                max-width: 100%;
+                flex: none;
+            }
+
+            .search-input {
+                font-size: 16px;
+                /* Prevents zoom on iOS */
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            /* Ensure buttons are full width on mobile */
+            .btn {
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            /* Fix vehicle grid overflow */
+            .vehicle-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+                margin-top: 16px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* Fix pagination overflow */
+            .pagination {
+                flex-wrap: wrap;
+                gap: 8px !important;
+                justify-content: center !important;
+                width: 100% !important;
+            }
+
+            /* Ensure all flex containers don't overflow */
+            .flex {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            /* Fix any padding/margin issues */
+            .p-4,
+            .px-4,
+            .py-4 {
+                padding: 12px !important;
+            }
+
+            .gap-3 {
+                gap: 12px !important;
+            }
+
+            /* Ensure rounded elements don't cause overflow */
+            .rounded-xl,
+            .rounded-lg {
+                border-radius: 8px !important;
+            }
+
+            /* Fix inventory hero */
+            .inventory-hero {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+
+            .inventory-hero h1,
+            .inventory-hero p {
+                max-width: 100% !important;
+                word-wrap: break-word;
             }
         }
 
@@ -76,6 +221,71 @@
                 padding: 10px 18px;
                 margin: 6px 0;
                 border-radius: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* Further mobile optimizations */
+            .container {
+                width: 100% !important;
+                padding: 0 10px !important;
+            }
+
+            .inventory-hero h1 {
+                font-size: 1.75rem;
+                padding: 0 !important;
+            }
+
+            .inventory-hero p {
+                font-size: 0.95rem;
+                padding: 0 !important;
+            }
+
+            /* Reduce padding on cards */
+            .search-container {
+                padding: 10px !important;
+                margin: 0 !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Extra small screens */
+            .container {
+                width: 100% !important;
+                max-width: 100vw !important;
+                padding: 0 8px !important;
+            }
+
+            .inventory-hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .inventory-hero p {
+                font-size: 0.9rem;
+            }
+
+            /* Further reduce gaps */
+            .vehicle-grid {
+                gap: 12px !important;
+            }
+
+            /* Ensure search container fits */
+            .search-container {
+                padding: 8px !important;
+                margin: 0 !important;
+            }
+
+            /* Make buttons even more compact */
+            .btn {
+                padding: 10px 12px !important;
+                width: 100% !important;
+            }
+
+            /* Reduce all gaps */
+            .gap-3 {
+                gap: 8px !important;
             }
         }
     </style>
