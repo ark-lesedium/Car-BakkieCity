@@ -9,14 +9,73 @@
     <link rel="stylesheet" href="index.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Mobile toggle hamburger menu */
+        .mobile-toggle {
+            display: none;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            z-index: 1400;
+        }
+
         /* Mobile-only vehicle image sizing: target 432x420 on narrow viewports */
         @media (max-width: 900px) {
+            .mobile-toggle {
+                display: block;
+            }
+
             .vehicle-card img {
                 width: 432px;
                 height: 420px;
                 max-width: 100%;
                 object-fit: cover;
                 display: block;
+            }
+        }
+
+        /* Mobile dropdown styling to match index.html */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: flex;
+                position: fixed;
+                top: 72px;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+                flex-direction: column;
+                align-items: center;
+                padding: 18px 0;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+                transform: translateY(-150%);
+                transition: transform 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s;
+                z-index: 1300;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+                transition-delay: 0s;
+                pointer-events: auto;
+            }
+
+            .nav-links .nav-link {
+                color: #fff;
+                display: block;
+                padding: 10px 18px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links .nav-cta {
+                background: #fff;
+                color: #b91c1c;
+                padding: 10px 18px;
+                margin: 6px 0;
+                border-radius: 10px;
             }
         }
     </style>
@@ -150,32 +209,60 @@
     </footer>
 
     <script>
-        // Small, safe mobile toggle & navbar helpers copied from index.html
-        document.addEventListener('DOMContentLoaded', function () {
+        // Mobile Navigation Toggle (defensive: handles missing elements and adds ARIA support)
+        (function () {
             const mobileToggle = document.querySelector('.mobile-toggle');
             const navLinks = document.querySelector('.nav-links');
+
+            if (mobileToggle) {
+                // Make it keyboard accessible if not already
+                if (!mobileToggle.hasAttribute('role')) mobileToggle.setAttribute('role', 'button');
+                if (!mobileToggle.hasAttribute('tabindex')) mobileToggle.setAttribute('tabindex', '0');
+                mobileToggle.setAttribute('aria-label', 'Toggle navigation');
+                // default collapsed
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            }
+
+            function toggleNav() {
+                if (!navLinks || !mobileToggle) return;
+                const isOpen = navLinks.classList.toggle('active');
+                mobileToggle.setAttribute('aria-expanded', String(isOpen));
+            }
+
             if (mobileToggle && navLinks) {
-                mobileToggle.addEventListener('click', function () {
-                    navLinks.classList.toggle('active');
+                mobileToggle.addEventListener('click', toggleNav);
+                mobileToggle.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleNav();
+                    }
                 });
             }
 
-            // Navbar scroll effect (safe guards)
-            const navbar = document.querySelector('.navbar');
-            if (navbar) {
-                window.addEventListener('scroll', function () {
-                    if (window.scrollY > 50) navbar.classList.add('scrolled');
-                    else navbar.classList.remove('scrolled');
+            // Navbar scroll effect (guarded)
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (!navbar) return;
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Close mobile menu when clicking on a link
+            const navLinkEls = document.querySelectorAll('.nav-link');
+            if (navLinkEls && navLinks) {
+                navLinkEls.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
+                    });
                 });
             }
-
-            // Close mobile menu when clicking a nav link
-            const navLinksList = document.querySelectorAll('.nav-link');
-            if (navLinksList && navLinks) {
-                navLinksList.forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
-            }
-        });
+        })();
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
     <script type="module">
         import { fetchCars, fetchCarsFiltered, fetchCarsPage } from './connections/supabase_client.js';

@@ -304,8 +304,14 @@
 		}
 
 		@media(max-width:900px) {
+
+			/* Do not force display:none here — let the global mobile menu CSS
+			   (in index.css) control visibility via transform/opacity when
+			   the `.active` class is toggled. For accessibility keep the
+			   toggle visible. */
 			.nav-links {
-				display: none
+				display: flex;
+				/* allow index.css .nav-links.active rules to work */
 			}
 
 			.mobile-toggle {
@@ -314,6 +320,54 @@
 
 			.navbar .logo .logo-img {
 				height: 40px
+			}
+		}
+
+		/* Mobile dropdown styling to match index.html: stacked links on a red header
+		   background, white link text, and smooth show/hide via the `.active` class. */
+		@media (max-width: 900px) {
+			.nav-links {
+				position: fixed;
+				top: 72px;
+				left: 0;
+				width: 100%;
+				background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+				flex-direction: column;
+				align-items: center;
+				padding: 18px 0;
+				box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+				transform: translateY(-150%);
+				transition: transform 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s;
+				z-index: 1300;
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+
+			.nav-links.active {
+				transform: translateY(0);
+				opacity: 1;
+				visibility: visible;
+				transition-delay: 0s;
+				pointer-events: auto;
+			}
+
+			/* Make nav links visually match index.html: white text and roomy touch targets */
+			.nav-links .nav-link {
+				color: #fff;
+				display: block;
+				padding: 10px 18px;
+				width: 100%;
+				text-align: center;
+			}
+
+			/* CTA buttons inside the mobile dropdown should invert like on index.html */
+			.nav-links .nav-cta {
+				background: #fff;
+				color: #b91c1c;
+				padding: 10px 18px;
+				margin: 6px 0;
+				border-radius: 10px;
 			}
 		}
 
@@ -353,6 +407,18 @@
 			padding: 0 16px
 		}
 
+		/* Ensure mobile hamburger sits above other overlays and is clickable */
+		.mobile-toggle {
+			position: relative;
+			z-index: 1300;
+			cursor: pointer;
+		}
+
+		/* Ensure the dropdown nav sits above page content when opened */
+		.nav-links {
+			z-index: 1290;
+		}
+
 		.inventory-hero h1 {
 			margin: 0 0 6px;
 			font-size: 2rem
@@ -361,6 +427,27 @@
 		.inventory-hero p {
 			color: #374151;
 			margin: 0 0 12px
+		}
+
+		/* Prevent horizontal overflow on small screens */
+		html,
+		body {
+			max-width: 100%;
+			overflow-x: hidden;
+		}
+
+		/* Ensure media fit their containers and don't force horizontal scroll */
+		img,
+		video,
+		iframe {
+			max-width: 100%;
+			height: auto;
+			display: block;
+		}
+
+		/* safety: make container include padding in width calculations */
+		.container {
+			box-sizing: border-box;
 		}
 	</style>
 </head>
@@ -877,6 +964,8 @@
 				if (!navLinks || !mobileToggle) return;
 				const isOpen = navLinks.classList.toggle('active');
 				mobileToggle.setAttribute('aria-expanded', String(isOpen));
+				// debug: log toggle state
+				if (window && window.console) console.log('mobileToggle toggled, active=', isOpen);
 			}
 
 			if (mobileToggle && navLinks) {

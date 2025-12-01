@@ -379,6 +379,34 @@
         padding: 0 12px;
       }
 
+      /* make the hero search a bit longer on mobile and lay out horizontally */
+      .search-overlay form {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 8px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 8px;
+        align-items: center;
+      }
+
+      /* Let the input take remaining horizontal space */
+      .search-overlay form input#hero-search-input {
+        flex: 1 1 auto;
+        min-width: 0;
+        /* allow flex to shrink on very small screens */
+        font-size: 1.02rem;
+      }
+
+      /* Make buttons inline so the input can expand horizontally */
+      .search-overlay form .btn,
+      .search-overlay form a.btn {
+        width: auto !important;
+        flex: 0 0 auto;
+        padding: 8px 10px;
+        white-space: nowrap;
+      }
+
       /* ensure the hero image is visible and not covered */
       .slideshow-media {
         display: block;
@@ -1489,7 +1517,19 @@
       const emptyMsg = document.getElementById('search-empty');
 
       if (!query || !query.trim()) {
-        if (resultsSection) resultsSection.style.display = 'none';
+        if (resultsSection) {
+          resultsSection.style.display = 'none';
+          // move overlay back to original position on mobile when clearing
+          try {
+            const origParent = window.__searchOverlayOrigParent;
+            const origNext = window.__searchOverlayOrigNext;
+            const overlay = document.querySelector('.search-overlay');
+            if (overlay && origParent) {
+              if (origNext) origParent.insertBefore(overlay, origNext);
+              else origParent.appendChild(overlay);
+            }
+          } catch (e) { /* ignore */ }
+        }
         return [];
       }
 
@@ -1512,7 +1552,20 @@
         }
 
         // show results summary only (do not render full cards on index)
-        if (resultsSection) resultsSection.style.display = 'block';
+        if (resultsSection) {
+          resultsSection.style.display = 'block';
+          // On small screens, move the search overlay above the results so it isn't hidden under other sections
+          if (window.innerWidth <= 640) {
+            try {
+              const overlay = document.querySelector('.search-overlay');
+              if (overlay && resultsSection.parentNode) {
+                resultsSection.parentNode.insertBefore(overlay, resultsSection);
+              }
+              // scroll results into view so the user sees them immediately
+              resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (e) { /* ignore if DOM changes prevent move */ }
+          }
+        }
         if (!vehicles || vehicles.length === 0) {
           if (resultsContainer) resultsContainer.innerHTML = '';
           if (emptyMsg) emptyMsg.style.display = 'block';
@@ -1555,6 +1608,15 @@
     document.addEventListener('DOMContentLoaded', function () {
       loadFeaturedVehicles();
       loadNewDeals();
+
+      // store original parent for the search overlay so we can move it on mobile and restore it
+      try {
+        const searchOverlay = document.querySelector('.search-overlay');
+        if (searchOverlay) {
+          window.__searchOverlayOrigParent = searchOverlay.parentNode;
+          window.__searchOverlayOrigNext = searchOverlay.nextElementSibling;
+        }
+      } catch (e) { /* ignore */ }
 
       // Wire up hero search form
       const heroForm = document.getElementById('hero-search-form');

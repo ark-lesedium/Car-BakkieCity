@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="index.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Prevent horizontal scroll on mobile */
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+
         /* Toast styles (small, self-contained) */
         .toast-wrap {
             position: fixed;
@@ -69,12 +77,10 @@
         /* Small page hero to give context without pushing the form down too far */
         /* Full-bleed horizontally so it reaches the viewport edges */
         .page-hero {
-            width: 100vw;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 100%;
+            max-width: 100%;
             height: 180px;
             border-radius: 0;
-            /* full-bleed should not have rounded viewport edges */
             background-image: url('images/car-hero.jpg');
             background-size: cover;
             background-position: center center;
@@ -90,9 +96,144 @@
             background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.08));
         }
 
+        /* Layout grid for form and sidebar */
+        .sell-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 24px;
+            align-items: start;
+            margin-top: 18px;
+        }
+
+        /* Mobile toggle hamburger menu */
+        .mobile-toggle {
+            display: none;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            z-index: 1400;
+        }
+
+        /* Mobile dropdown styling to match index.html */
+        @media (max-width: 900px) {
+            .mobile-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: flex;
+                position: fixed;
+                top: 72px;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+                flex-direction: column;
+                align-items: center;
+                padding: 18px 0;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+                transform: translateY(-150%);
+                transition: transform 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s;
+                z-index: 1300;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+                transition-delay: 0s;
+                pointer-events: auto;
+            }
+
+            .nav-links .nav-link {
+                color: #fff;
+                display: block;
+                padding: 10px 18px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links .nav-cta {
+                background: #fff;
+                color: #b91c1c;
+                padding: 10px 18px;
+                margin: 6px 0;
+                border-radius: 10px;
+            }
+
+            /* Stack layout on mobile */
+            .sell-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
         @media (max-width: 768px) {
             .page-hero {
                 height: 120px;
+            }
+
+            /* Mobile-friendly toast positioning */
+            .toast-wrap {
+                right: 10px;
+                bottom: 10px;
+                left: 10px;
+            }
+
+            .toast {
+                min-width: auto;
+                width: 100%;
+            }
+
+            /* Ensure form elements don't overflow */
+            .form-control,
+            input,
+            select,
+            textarea {
+                max-width: 100%;
+                font-size: 16px;
+                /* Prevents zoom on iOS */
+            }
+
+            /* Button adjustments for mobile */
+            .btn {
+                width: 100%;
+                margin-left: 0 !important;
+                margin-top: 8px;
+            }
+
+            /* Reduce padding on mobile */
+            .bg-white.rounded-xl {
+                padding: 16px !important;
+            }
+
+            /* Section title mobile adjustments */
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .lead {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Extra small screens */
+            .container {
+                width: 95%;
+                padding: 0 10px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .bg-white.rounded-xl {
+                padding: 12px !important;
             }
         }
     </style>
@@ -127,7 +268,7 @@
             <p class="lead">Complete the form below with your vehicle details and contact information. Our valuations
                 team will review and get back to you with an offer.</p>
 
-            <div class="grid" style="grid-template-columns: 1fr 420px; gap:24px; align-items:start; margin-top:18px;">
+            <div class="sell-grid">
                 <section class="bg-white rounded-xl p-6 shadow-sm">
                     <h2 class="text-xl font-semibold mb-4">Vehicle details</h2>
                     <form id="sellForm" class="search-container" novalidate action="https://formspree.io/f/mgvpgrko"
@@ -311,9 +452,58 @@
     <div class="toast-wrap" aria-live="polite" aria-atomic="true" id="toastWrap"></div>
 
     <script>
-        const mobileToggle = document.querySelector('.mobile-toggle');
-        const navLinks = document.querySelector('.nav-links');
-        mobileToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+        // Mobile Navigation Toggle (defensive: handles missing elements and adds ARIA support)
+        (function () {
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (mobileToggle) {
+                // Make it keyboard accessible if not already
+                if (!mobileToggle.hasAttribute('role')) mobileToggle.setAttribute('role', 'button');
+                if (!mobileToggle.hasAttribute('tabindex')) mobileToggle.setAttribute('tabindex', '0');
+                mobileToggle.setAttribute('aria-label', 'Toggle navigation');
+                // default collapsed
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            }
+
+            function toggleNav() {
+                if (!navLinks || !mobileToggle) return;
+                const isOpen = navLinks.classList.toggle('active');
+                mobileToggle.setAttribute('aria-expanded', String(isOpen));
+            }
+
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', toggleNav);
+                mobileToggle.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleNav();
+                    }
+                });
+            }
+
+            // Navbar scroll effect (guarded)
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (!navbar) return;
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Close mobile menu when clicking on a link
+            const navLinkEls = document.querySelectorAll('.nav-link');
+            if (navLinkEls && navLinks) {
+                navLinkEls.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+        })();
     </script>
     <script>
         // Sell form client-side handling

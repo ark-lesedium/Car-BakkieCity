@@ -8,6 +8,53 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<link rel="stylesheet" href="index.css">
 	<script src="https://cdn.tailwindcss.com"></script>
+
+	<style>
+		/* Mobile dropdown styling to match index.html */
+		@media (max-width: 900px) {
+			.nav-links {
+				position: fixed;
+				top: 72px;
+				left: 0;
+				width: 100%;
+				background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+				flex-direction: column;
+				align-items: center;
+				padding: 18px 0;
+				box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+				transform: translateY(-150%);
+				transition: transform 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s;
+				z-index: 1300;
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+
+			.nav-links.active {
+				transform: translateY(0);
+				opacity: 1;
+				visibility: visible;
+				transition-delay: 0s;
+				pointer-events: auto;
+			}
+
+			.nav-links .nav-link {
+				color: #fff;
+				display: block;
+				padding: 10px 18px;
+				width: 100%;
+				text-align: center;
+			}
+
+			.nav-links .nav-cta {
+				background: #fff;
+				color: #b91c1c;
+				padding: 10px 18px;
+				margin: 6px 0;
+				border-radius: 10px;
+			}
+		}
+	</style>
 </head>
 
 <body>
