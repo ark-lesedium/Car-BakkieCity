@@ -1234,12 +1234,15 @@
     function buildVehicleCard(vehicle) {
       const title = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.variant || ''}`.trim();
       const productUrl = `vehicle-detail.html?id=${vehicle.id}`;
+      // Support both JSON (image_main) and Supabase (main_image_url) structures
+      const imageUrl = vehicle.image_main || vehicle.main_image_url || 'images/CarandBakkieCityLogo.jpg';
+      const location = vehicle.location || 'Kimberley';
 
       return `
                 <div class="grid-item">
                     <div class="card-media">
                         <a href="${productUrl}" class="js-product-link">
-                            <img src="${vehicle.main_image_url}" alt="${title}" class="card-media-image" loading="lazy">
+                            <img src="${imageUrl}" alt="${title}" class="card-media-image" loading="lazy">
                         </a>
                     </div>
                     <div class="card-info">
@@ -1250,7 +1253,7 @@
                             ${vehicle.mileage ? `<div class="custom-meta">${formatMileage(vehicle.mileage)}</div>` : ''}
                             ${vehicle.transmission ? `<div class="custom-meta">${vehicle.transmission}</div>` : ''}
                             <div class="custom-meta">
-                                <span class="location-pill-text">${vehicle.location}</span>
+                                <span class="location-pill-text">${location}</span>
                             </div>
                         </div>
                     </div>
@@ -1269,35 +1272,14 @@
       if (!container) return;
 
       try {
-        // dynamically import the supabase helper module from connections
-        let carsModule = null;
-        try {
-          carsModule = await import('./connections/supabase_client.js');
-          console.log('Successfully loaded supabase_client module');
-        } catch (err) {
-          console.warn('Could not import supabase_client module, falling back to inline client:', err);
+        // Fetch from local JSON file
+        console.log('Fetching featured vehicles from vehicle_list.json...');
+        const res = await fetch('./vehicle_list.json');
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
         }
-
-        // fetch cars using the module if available, else fall back to creating a client
-        let allVehicles = null;
-        if (carsModule && typeof carsModule.fetchCars === 'function') {
-          console.log('Fetching cars using module...');
-          allVehicles = await carsModule.fetchCars();
-          console.log('Fetched vehicles:', allVehicles ? allVehicles.length : 0);
-        } else {
-          console.log('Module not available, attempting fallback...');
-          // Try to create a supabase client as fallback
-          try {
-            const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-            supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            const resp = await supabaseClient.from('cars').select('*').limit(100);
-            allVehicles = resp && resp.data ? resp.data : [];
-            console.log('Fallback fetch successful:', allVehicles.length);
-          } catch (fallbackErr) {
-            console.error('Fallback also failed:', fallbackErr);
-            allVehicles = [];
-          }
-        }
+        let allVehicles = await res.json();
+        console.log('Fetched vehicles from JSON:', allVehicles ? allVehicles.length : 0);
 
         if (!allVehicles || allVehicles.length === 0) {
           container.innerHTML = '<p>No featured vehicles available at the moment.</p>';
@@ -1384,104 +1366,93 @@
       }
     }
 
-    // Load and display the 'New Wheels, New Deals' images with the same rotation animation as Featured Vehicles
-    function buildImageCard(src, alt = '') {
-      return `
-                <div class="grid-item">
-                    <div class="card-media">
-                        <img src="${src}" alt="${alt}" class="card-media-image" loading="lazy">
-                    </div>
-                </div>
-            `;
-    }
-
-    function loadNewDeals() {
-      // explicit list of image URLs provided
-      const images = [
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/1.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/10.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/11.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/18.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/18.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/5.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/7.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/8.jpg',
-        'https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/9.jpg'
-      ];
-
+    // Load and display the 'New Wheels, New Deals' section with vehicle cards
+    async function loadNewDeals() {
       const container = document.getElementById('new-deals');
       if (!container) return;
 
-      // remove duplicate URLs while preserving order so the same image
-      // cannot appear more than once in the visible set at the same time
-      const allItems = images.filter((v, i, a) => a.indexOf(v) === i);
-      if (allItems.length === 0) {
-        container.innerHTML = '<p>No deals available.</p>';
-        return;
+      try {
+        // Fetch from local JSON file
+        console.log('Fetching new deals from vehicle_list.json...');
+        const res = await fetch('./vehicle_list.json');
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+        }
+        let allVehicles = await res.json();
+        console.log('Fetched vehicles for new deals:', allVehicles ? allVehicles.length : 0);
+
+        if (!allVehicles || allVehicles.length === 0) {
+          container.innerHTML = '<p>No deals available.</p>';
+          return;
+        }
+
+        const visibleCount = Math.min(4, allVehicles.length);
+
+        // initial indices
+        const visibleIndices = [];
+        for (let i = 0; i < visibleCount; i++) visibleIndices.push(i);
+
+        // If no rotation needed just render
+        if (allVehicles.length <= visibleCount) {
+          container.innerHTML = visibleIndices.map(i => buildVehicleCard(allVehicles[i])).join('');
+          return;
+        }
+
+        container.innerHTML = visibleIndices.map(i => buildVehicleCard(allVehicles[i])).join('');
+
+        let nextGlobalIndex = visibleCount % allVehicles.length;
+        let replacePos = 0;
+        let rotateInterval = null;
+
+        function replaceOneCard() {
+          const children = container.querySelectorAll('.grid-item');
+          const oldEl = children[replacePos];
+          if (!oldEl) return;
+
+          oldEl.classList.add('fade-out');
+
+          setTimeout(() => {
+            const newVehicle = allVehicles[nextGlobalIndex];
+            try {
+              oldEl.outerHTML = buildVehicleCard(newVehicle);
+            } catch (err) {
+              console.error('Error replacing card HTML:', err);
+            }
+
+            visibleIndices[replacePos] = nextGlobalIndex;
+            nextGlobalIndex = (nextGlobalIndex + 1) % allVehicles.length;
+
+            const newChildren = container.querySelectorAll('.grid-item');
+            const newEl = newChildren[replacePos];
+            if (newEl) {
+              newEl.classList.add('fade-in');
+              setTimeout(() => newEl.classList.remove('fade-in'), 500);
+            }
+
+            replacePos = (replacePos + 1) % visibleCount;
+          }, 420);
+        }
+
+        function startRotation() {
+          stopRotation();
+          rotateInterval = setInterval(replaceOneCard, 4500);
+        }
+
+        function stopRotation() {
+          if (rotateInterval) { clearInterval(rotateInterval); rotateInterval = null; }
+        }
+
+        container.addEventListener('mouseenter', stopRotation);
+        container.addEventListener('mouseleave', startRotation);
+
+        startRotation();
+
+        container.__newDealIndices = visibleIndices;
+      } catch (err) {
+        console.error('Failed to load new deals', err);
+        const container = document.getElementById('new-deals');
+        if (container) container.innerHTML = '<p>Error loading deals.</p>';
       }
-
-      const visibleCount = Math.min(4, allItems.length);
-
-      // initial indices
-      const visibleIndices = [];
-      for (let i = 0; i < visibleCount; i++) visibleIndices.push(i);
-
-      // If no rotation needed just render
-      if (allItems.length <= visibleCount) {
-        container.innerHTML = visibleIndices.map(i => buildImageCard(allItems[i])).join('');
-        return;
-      }
-
-      container.innerHTML = visibleIndices.map(i => buildImageCard(allItems[i])).join('');
-
-      let nextGlobalIndex = visibleCount % allItems.length;
-      let replacePos = 0;
-      let rotateInterval = null;
-
-      function replaceOneImage() {
-        const children = container.querySelectorAll('.grid-item');
-        const oldEl = children[replacePos];
-        if (!oldEl) return;
-
-        oldEl.classList.add('fade-out');
-
-        setTimeout(() => {
-          const newSrc = allItems[nextGlobalIndex];
-          try {
-            oldEl.outerHTML = buildImageCard(newSrc);
-          } catch (err) {
-            console.error('Error replacing image HTML:', err);
-          }
-
-          visibleIndices[replacePos] = nextGlobalIndex;
-          nextGlobalIndex = (nextGlobalIndex + 1) % allItems.length;
-
-          const newChildren = container.querySelectorAll('.grid-item');
-          const newEl = newChildren[replacePos];
-          if (newEl) {
-            newEl.classList.add('fade-in');
-            setTimeout(() => newEl.classList.remove('fade-in'), 500);
-          }
-
-          replacePos = (replacePos + 1) % visibleCount;
-        }, 420);
-      }
-
-      function startRotation() {
-        stopRotation();
-        rotateInterval = setInterval(replaceOneImage, 4500);
-      }
-
-      function stopRotation() {
-        if (rotateInterval) { clearInterval(rotateInterval); rotateInterval = null; }
-      }
-
-      container.addEventListener('mouseenter', stopRotation);
-      container.addEventListener('mouseleave', startRotation);
-
-      startRotation();
-
-      container.__newDealIndices = visibleIndices;
     }
 
     // --- Search support: query Supabase and render results ---

@@ -82,12 +82,30 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+  <!-- Supabase library - kept for future use -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script> -->
 
   <script type="module">
-    import { fetchCarById } from './connections/supabase_client.js';
+    // Fetch from local JSON file instead of Supabase
+    // import { fetchCarById } from './connections/supabase_client.js';
 
     const container = document.getElementById('vehicleDetail');
+
+    async function fetchCarById(id) {
+      try {
+        const res = await fetch('./vehicle_list.json');
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status}`);
+        }
+        const cars = await res.json();
+        // Find car by ID (convert both to numbers for comparison)
+        const car = cars.find(c => String(c.id) === String(id) || Number(c.id) === Number(id));
+        return car || null;
+      } catch (err) {
+        console.error('Error fetching car:', err);
+        return null;
+      }
+    }
 
     function formatPrice(value, currency) {
       if (value == null || value === '') return '';
@@ -107,10 +125,14 @@
       return `<div class="spec-row"><strong>${label}:</strong> <span>${value}</span></div>`;
     }
 
-    function renderGallery(main, gallery) {
+    function renderGallery(car) {
       const imgs = [];
-      if (main) imgs.push(main);
-      if (Array.isArray(gallery)) imgs.push(...gallery.filter(Boolean));
+      // Support both JSON and Supabase structures
+      const mainImage = car.image_main || car.main_image_url;
+      const galleryImages = car.images || car.gallery_images;
+
+      if (mainImage) imgs.push(mainImage);
+      if (Array.isArray(galleryImages)) imgs.push(...galleryImages.filter(Boolean));
       if (imgs.length === 0) return '';
       const html = imgs.map(src => `<img class="detail-image" src="${src}" />`).join('');
       return `<div class="gallery">${html}</div>`;
@@ -131,19 +153,24 @@
 
       const price = formatPrice(car.price, car.currency);
 
+      // Support both JSON and Supabase field names
+      const fuelType = car.fuel_type || car.engine_type;
+      const description = car.description || '';
+
       const html = `
         <div class="vehicle-detail-grid">
           <div class="detail-left">
-            ${renderGallery(car.main_image_url, car.gallery_images)}
+            ${renderGallery(car)}
           </div>
           <div class="detail-right">
             <h1>${[car.year, car.make, car.model, car.variant].filter(Boolean).join(' ')}</h1>
             <p class="price-large">${price}</p>
             <p class="availability">${car.availability_status || ''}</p>
+            ${description ? `<p class="description">${description}</p>` : ''}
             <div class="specs">
               ${renderSpecRow('VIN', car.vin)}
               ${renderSpecRow('Registration', car.registration_number)}
-              ${renderSpecRow('Engine', car.engine_type + (car.engine_size ? (' ' + car.engine_size) : ''))}
+              ${renderSpecRow('Fuel Type', fuelType + (car.engine_size ? (' ' + car.engine_size) : ''))}
               ${renderSpecRow('Horsepower', car.horsepower)}
               ${renderSpecRow('Torque', car.torque)}
               ${renderSpecRow('Transmission', car.transmission)}
@@ -195,6 +222,16 @@
       font-size: 1.6rem;
       font-weight: 700;
       margin: 8px 0;
+    }
+
+    .detail-right .description {
+      font-size: 1rem;
+      color: #555;
+      margin: 12px 0;
+      padding: 12px;
+      background: #f9f9f9;
+      border-left: 3px solid var(--primary, #b91c1c);
+      border-radius: 4px;
     }
 
     .spec-row {

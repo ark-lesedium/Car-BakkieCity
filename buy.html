@@ -601,9 +601,11 @@
         })();
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+    <!-- Supabase library - kept for future use -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script> -->
     <script type="module">
-        import { fetchCars, fetchCarsFiltered, fetchCarsPage } from './connections/supabase_client.js';
+        // Fetch from local JSON file instead of Supabase
+        // import { fetchCars, fetchCarsFiltered, fetchCarsPage } from './connections/supabase_client.js';
 
         const grid = document.getElementById('vehicleGrid');
         const fetchStatus = document.getElementById('fetchStatus');
@@ -616,7 +618,8 @@
         function formatPrice(value) { if (value == null || value === '') return ''; const n = Number(value); if (Number.isNaN(n)) return value; return 'R ' + n.toLocaleString(); }
 
         function createCard(vehicle, detailed = false) {
-            const img = vehicle.main_image_url || (Array.isArray(vehicle.gallery_images) && vehicle.gallery_images[0]) || 'images/CarandBakkieCityLogo.jpg'; const year = vehicle.year || ''; const make = vehicle.make || ''; const model = vehicle.model || ''; const variant = vehicle.variant || ''; const title = [year, make, model, variant].filter(Boolean).join(' '); const engine = vehicle.engine_type || ''; const transmission = vehicle.transmission || ''; const drivetrain = vehicle.drivetrain || ''; const mileage = vehicle.mileage || ''; const metaParts = []; if (engine) metaParts.push(engine); if (transmission) metaParts.push(transmission); if (drivetrain) metaParts.push(drivetrain); if (mileage) metaParts.push((typeof mileage === 'number' ? mileage.toLocaleString() : mileage) + ' km'); const meta = metaParts.join(' • '); const currency = vehicle.currency || 'R'; const priceVal = vehicle.price; const price = (priceVal == null || priceVal === '') ? '' : `${currency} ${Number(priceVal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            // Support both JSON (image_main) and Supabase (main_image_url) structures
+            const img = vehicle.image_main || vehicle.main_image_url || (Array.isArray(vehicle.images) && vehicle.images[0]) || (Array.isArray(vehicle.gallery_images) && vehicle.gallery_images[0]) || 'images/CarandBakkieCityLogo.jpg'; const year = vehicle.year || ''; const make = vehicle.make || ''; const model = vehicle.model || ''; const variant = vehicle.variant || ''; const title = [year, make, model, variant].filter(Boolean).join(' '); const engine = vehicle.fuel_type || vehicle.engine_type || ''; const transmission = vehicle.transmission || ''; const drivetrain = vehicle.drivetrain || ''; const mileage = vehicle.mileage || ''; const metaParts = []; if (engine) metaParts.push(engine); if (transmission) metaParts.push(transmission); if (drivetrain) metaParts.push(drivetrain); if (mileage) metaParts.push((typeof mileage === 'number' ? mileage.toLocaleString() : mileage) + ' km'); const meta = metaParts.join(' • '); const currency = vehicle.currency || 'R'; const priceVal = vehicle.price; const price = (priceVal == null || priceVal === '') ? '' : `${currency} ${Number(priceVal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             const card = document.createElement('div'); card.className = 'vehicle-card'; card.style.cursor = 'pointer'; card.addEventListener('click', (e) => { if (e.target.closest('a') || e.target.closest('button')) return; window.location.href = `vehicle-detail.html?id=${encodeURIComponent(vehicle.id)}`; });
             card.innerHTML = `
                 <img src="${img}" alt="${title}">
@@ -636,6 +639,12 @@
         async function loadAndRender(page = 1, perPage = 12) {
             try {
                 fetchStatus.textContent = 'Loading vehicles...'; showProgress();
+
+                // Fetch from local JSON file
+                const res = await fetch('./vehicle_list.json');
+                if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
+                let allVehicles = await res.json();
+
                 const params = new URLSearchParams(window.location.search);
                 const filters = {
                     query: params.get('query') || undefined,
@@ -647,9 +656,18 @@
                     type: params.get('type') || undefined,
                 };
 
-                let vehicles = []; let totalCount = 0; const usePaged = typeof fetchCarsPage === 'function';
-                if (usePaged) { const res = await fetchCarsPage({ filters, page, perPage }); vehicles = res.data || []; totalCount = res.count || 0; }
-                else { const hasAnyFilter = Object.values(filters).some(v => v !== undefined && v !== ''); if (hasAnyFilter) vehicles = await fetchCarsFiltered(filters); else vehicles = await fetchCars(); totalCount = vehicles ? vehicles.length : 0; const start = (page - 1) * perPage; vehicles = (vehicles || []).slice(start, start + perPage); }
+                // Apply filters client-side
+                let vehicles = allVehicles;
+                if (filters.make) vehicles = vehicles.filter(v => v.make && v.make.toLowerCase().includes(filters.make.toLowerCase()));
+                if (filters.model) vehicles = vehicles.filter(v => v.model && v.model.toLowerCase().includes(filters.model.toLowerCase()));
+                if (filters.year) { const year = Number(filters.year); vehicles = vehicles.filter(v => v.year === year); }
+                if (filters.min_price) { const minPrice = Number(filters.min_price); vehicles = vehicles.filter(v => v.price >= minPrice); }
+                if (filters.max_price) { const maxPrice = Number(filters.max_price); vehicles = vehicles.filter(v => v.price <= maxPrice); }
+                if (filters.query) { const q = filters.query.toLowerCase(); vehicles = vehicles.filter(v => (v.make && v.make.toLowerCase().includes(q)) || (v.model && v.model.toLowerCase().includes(q)) || (v.description && v.description.toLowerCase().includes(q))); }
+
+                const totalCount = vehicles.length;
+                const start = (page - 1) * perPage;
+                vehicles = vehicles.slice(start, start + perPage);
 
                 if (!vehicles) { fetchStatus.textContent = 'Failed to fetch vehicles.'; grid.innerHTML = ''; hideProgress(); return; }
                 if (vehicles.length === 0) { fetchStatus.textContent = 'No vehicles found.'; grid.innerHTML = ''; renderPagination(totalCount, page, perPage); hideProgress(); return; }
