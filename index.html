@@ -225,6 +225,15 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slideshow-media {
+      background: #000;
+    }
+
+    .slideshow-media img.fade {
+      opacity: 0;
     }
 
     /* Category Tabs */
@@ -911,8 +920,10 @@
     <!-- Hero Slideshow -->
     <section class="slideshow">
       <div class="slideshow-media relative">
-        <a href="inventory.html">
-          <img src="images/car-hero.jpg" alt="Car and Bakkie City hero" class="slideshow-media-desktop-img">
+        <a href="inventory.html" id="hero-link">
+          <img id="hero-image"
+            src="https://res.cloudinary.com/du34hokgz/image/upload/v1765106333/20251112_103124_oqddnt.jpg"
+            alt="Car and Bakkie City hero" class="slideshow-media-desktop-img">
         </a>
 
         <!-- Search overlay placed on top of the hero image -->
@@ -1046,8 +1057,7 @@
         <div class="grid-item">
           <div class="card-media">
             <a href="inventory.html?category=sedan">
-              <img loading="lazy"
-                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/sedan.jpg"
+              <img loading="lazy" src="https://res.cloudinary.com/du34hokgz/image/upload/v1765101096/Load_10_ticbtu.jpg"
                 alt="Sedan">
             </a>
           </div>
@@ -1060,8 +1070,7 @@
         <div class="grid-item">
           <div class="card-media">
             <a href="inventory.html?category=hatchback">
-              <img loading="lazy"
-                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/hatchback.jpg"
+              <img loading="lazy" src="https://res.cloudinary.com/du34hokgz/image/upload/v1765101310/57_qkomgk.jpg"
                 alt="Hatchback">
             </a>
           </div>
@@ -1074,8 +1083,7 @@
         <div class="grid-item">
           <div class="card-media">
             <a href="inventory.html?category=suv">
-              <img loading="lazy"
-                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/SUV.jpg"
+              <img loading="lazy" src="https://res.cloudinary.com/du34hokgz/image/upload/v1765106949/20251124_112146_nhwj1r.jpg"
                 alt="SUV">
             </a>
           </div>
@@ -1088,8 +1096,7 @@
         <div class="grid-item">
           <div class="card-media">
             <a href="inventory.html?category=minibus">
-              <img loading="lazy"
-                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/minibus.jpg"
+              <img loading="lazy" src="https://res.cloudinary.com/du34hokgz/image/upload/v1765106954/20251121_155818_rkowdt.jpg"
                 alt="Minibus">
             </a>
           </div>
@@ -1102,8 +1109,7 @@
         <div class="grid-item">
           <div class="card-media">
             <a href="inventory.html?category=bakkie">
-              <img loading="lazy"
-                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/bakkie.jpg"
+              <img loading="lazy" src="https://res.cloudinary.com/du34hokgz/image/upload/v1765107009/bakkie_fncnuq.jpg"
                 alt="Bakkie">
             </a>
           </div>
@@ -1116,8 +1122,7 @@
         <div class="grid-item">
           <div class="card-media">
             <a href="inventory.html?category=commercial">
-              <img loading="lazy"
-                src="https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/Browse%20Categories%20section/commercial.jpg"
+              <img loading="lazy" src="https://res.cloudinary.com/du34hokgz/image/upload/v1765101096/Load_10_ticbtu.jpg"
                 alt="Commercial">
             </a>
           </div>
@@ -1551,6 +1556,48 @@
 
     // Initialize when DOM is loaded
     document.addEventListener('DOMContentLoaded', function () {
+      // Hero image rotation
+      const heroImages = [
+        'https://res.cloudinary.com/du34hokgz/image/upload/v1765106333/20251112_103124_oqddnt.jpg',
+        'https://res.cloudinary.com/du34hokgz/image/upload/v1765106591/20251121_161237_ubbvs3.jpg',
+        'https://res.cloudinary.com/du34hokgz/image/upload/v1765106601/20251121_155825_lgow5j.jpg',
+        'https://res.cloudinary.com/du34hokgz/image/upload/v1765106602/20251121_162519_tzn5pj.jpg'
+      ];
+
+      let currentImageIndex = 0;
+      const heroImage = document.getElementById('hero-image');
+      const heroLink = document.getElementById('hero-link');
+
+      function rotateHeroImage() {
+        if (!heroImage) return;
+
+        // Fade out
+        heroImage.classList.add('fade');
+
+        setTimeout(() => {
+          // Change image
+          currentImageIndex = (currentImageIndex + 1) % heroImages.length;
+          heroImage.src = heroImages[currentImageIndex];
+
+          // Fade in
+          heroImage.classList.remove('fade');
+        }, 1000); // Wait for fade out to complete
+      }
+
+      // Rotate every 5 seconds
+      setInterval(rotateHeroImage, 5000);
+
+      // Pause rotation on hover
+      if (heroLink) {
+        heroLink.addEventListener('mouseenter', () => {
+          clearInterval(window.heroRotationInterval);
+        });
+
+        heroLink.addEventListener('mouseleave', () => {
+          window.heroRotationInterval = setInterval(rotateHeroImage, 5000);
+        });
+      }
+
       loadFeaturedVehicles();
       loadNewDeals();
 

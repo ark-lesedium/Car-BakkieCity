@@ -1,17 +1,7 @@
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/1.jpg
+https://res.cloudinary.com/du34hokgz/image/upload/v1765106333/20251112_103124_oqddnt.jpg
 
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/10.jpg
+https://res.cloudinary.com/du34hokgz/image/upload/v1765106591/20251121_161237_ubbvs3.jpg
 
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/11.jpg
+https://res.cloudinary.com/du34hokgz/image/upload/v1765106601/20251121_155825_lgow5j.jpg
 
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/18.jpg
-
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/18.jpg
-
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/5.jpg
-
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/7.jpg
-
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/8.jpg
-
-https://sgrxsnmewjlhxtdhnnsh.supabase.co/storage/v1/object/public/New%20Wheels,New%20Deals%20Section/9.jpg
+https://res.cloudinary.com/du34hokgz/image/upload/v1765106602/20251121_162519_tzn5pj.jpg
