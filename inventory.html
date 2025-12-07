@@ -606,11 +606,16 @@
 		</div>
 	</footer>
 
-	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
 
 	<script type="module">
 		// Import the fetch functions from the connections module (which contains your credentials)
+		console.log('Inventory: Starting module import...');
 		import { fetchCars, fetchCarsFiltered, fetchCarsPage } from './connections/supabase_client.js';
+		console.log('Inventory: Module import successful');
+		console.log('Inventory: fetchCars=', typeof fetchCars);
+		console.log('Inventory: fetchCarsFiltered=', typeof fetchCarsFiltered);
+		console.log('Inventory: fetchCarsPage=', typeof fetchCarsPage);
 
 		const grid = document.getElementById('vehicleGrid');
 
@@ -793,6 +798,7 @@
 
 		async function loadAndRender(page = 1, perPage = 12) {
 			try {
+				console.log(`loadAndRender called: page=${page}, perPage=${perPage}`);
 				const status = document.getElementById('fetchStatus');
 				status.textContent = 'Loading vehicles...';
 
@@ -809,26 +815,38 @@
 					min_price: params.get('min_price') || params.get('minPrice') || undefined,
 					max_price: params.get('max_price') || params.get('maxPrice') || undefined,
 				};
+				console.log('Filters:', filters);
 
 				// Attempt to use server-side pagination if available
 				let vehicles = [];
 				let totalCount = 0;
 				const usePaged = typeof fetchCarsPage === 'function';
+				console.log('usePaged:', usePaged);
 				if (usePaged) {
+					console.log('Fetching with fetchCarsPage...');
 					const res = await fetchCarsPage({ filters, page, perPage });
+					console.log('fetchCarsPage result:', res);
 					vehicles = res.data || [];
 					totalCount = res.count || 0;
 				} else {
 					// Fallback: fetch all and paginate client-side
 					const hasAnyFilter = Object.values(filters).some(v => v !== undefined && v !== '');
-					if (hasAnyFilter) vehicles = await fetchCarsFiltered(filters);
-					else vehicles = await fetchCars();
+					console.log('hasAnyFilter:', hasAnyFilter);
+					if (hasAnyFilter) {
+						console.log('Fetching with fetchCarsFiltered...');
+						vehicles = await fetchCarsFiltered(filters);
+					} else {
+						console.log('Fetching with fetchCars...');
+						vehicles = await fetchCars();
+					}
+					console.log('Fetch result:', vehicles);
 					totalCount = vehicles ? vehicles.length : 0;
 					// slice client-side
 					const start = (page - 1) * perPage;
 					vehicles = (vehicles || []).slice(start, start + perPage);
 				}
 				if (!vehicles) {
+					console.error('vehicles is null - fetch failed');
 					status.textContent = 'Failed to fetch vehicles (see console).';
 					grid.innerHTML = '';
 					hideProgress();

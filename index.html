@@ -1212,48 +1212,11 @@
   <!-- JavaScript -->
   <script type="module">
     // Supabase configuration
-    const SUPABASE_URL = 'https://your-project.supabase.co';
-    const SUPABASE_ANON_KEY = 'your-anon-key';
+    const SUPABASE_URL = 'https://sgrxsnmewjlhxtdhnnsh.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNncnhzbm1ld2psaHh0ZGhubnNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMzYxODcsImV4cCI6MjA3NzYxMjE4N30.fBqyxlaTyNMJQ55i8SIoz5xuNuX_rwZ-WlNUpz-Wdvk';
 
-    // Initialize Supabase client
-    const supabaseClient = {
-      from: (table) => ({
-        select: (columns) => ({
-          limit: (limit) => Promise.resolve({
-            data: generateMockData(limit),
-            error: null
-          })
-        })
-      })
-    };
-
-    // Generate mock data for demonstration
-    function generateMockData(limit) {
-      const vehicles = [];
-      const makes = ['Toyota', 'Ford', 'BMW', 'Mercedes', 'Hyundai', 'Kia'];
-      const models = ['Corolla', 'Ranger', 'X3', 'C-Class', 'Tucson', 'Sportage'];
-      const locations = ['Randfontein', 'Johannesburg', 'Pretoria', 'Cape Town'];
-
-      for (let i = 0; i < limit; i++) {
-        vehicles.push({
-          id: i + 1,
-          year: 2015 + (i % 8),
-          make: makes[i % makes.length],
-          model: models[i % models.length],
-          variant: `${i % 2 === 0 ? 'Automatic' : 'Manual'} ${i % 3 === 0 ? 'Premium' : 'Standard'}`,
-          mileage: (50000 + (i * 15000)),
-          price: (150000 + (i * 25000)),
-          transmission: i % 2 === 0 ? 'Automatic' : 'Manual',
-          location: locations[i % locations.length],
-          main_image_url: `https://picsum.photos/400/300?random=${i + 1}`,
-          gallery_images: [
-            `https://picsum.photos/400/300?random=${i + 1}`,
-            `https://picsum.photos/400/300?random=${i + 101}`
-          ]
-        });
-      }
-      return vehicles;
-    }
+    // Initialize Supabase client - will be created by the module or fallback
+    let supabaseClient = null;
 
     // Format price with R and commas
     function formatPrice(price) {
@@ -1310,19 +1273,30 @@
         let carsModule = null;
         try {
           carsModule = await import('./connections/supabase_client.js');
+          console.log('Successfully loaded supabase_client module');
         } catch (err) {
           console.warn('Could not import supabase_client module, falling back to inline client:', err);
         }
 
-        // fetch cars using the module if available, else fall back to the inline mock client
+        // fetch cars using the module if available, else fall back to creating a client
         let allVehicles = null;
         if (carsModule && typeof carsModule.fetchCars === 'function') {
+          console.log('Fetching cars using module...');
           allVehicles = await carsModule.fetchCars();
-        } else if (typeof supabaseClient !== 'undefined' && supabaseClient.from) {
-          const resp = await supabaseClient.from('vehicles').select('*').limit(100);
-          allVehicles = resp && resp.data ? resp.data : [];
+          console.log('Fetched vehicles:', allVehicles ? allVehicles.length : 0);
         } else {
-          allVehicles = [];
+          console.log('Module not available, attempting fallback...');
+          // Try to create a supabase client as fallback
+          try {
+            const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+            supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const resp = await supabaseClient.from('cars').select('*').limit(100);
+            allVehicles = resp && resp.data ? resp.data : [];
+            console.log('Fallback fetch successful:', allVehicles.length);
+          } catch (fallbackErr) {
+            console.error('Fallback also failed:', fallbackErr);
+            allVehicles = [];
+          }
         }
 
         if (!allVehicles || allVehicles.length === 0) {

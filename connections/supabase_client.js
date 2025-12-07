@@ -10,20 +10,34 @@ async function getSupabaseClient() {
   if (_cachedClient) return _cachedClient;
 
   // Prefer the UMD global if available (site might include the script tag)
-  if (typeof window !== 'undefined' && window.supabase) {
+  // Version 2 of supabase-js exposes the global differently
+  if (typeof window !== 'undefined') {
     try {
-      _cachedClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      return _cachedClient;
+      // Try window.supabase first (v1 style)
+      if (window.supabase && window.supabase.createClient) {
+        _cachedClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('Created Supabase client from window.supabase');
+        return _cachedClient;
+      }
+      // Try accessing createClient directly from window (v2 UMD might export it differently)
+      if (window.createClient) {
+        _cachedClient = window.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('Created Supabase client from window.createClient');
+        return _cachedClient;
+      }
     } catch (err) {
-      console.warn('Failed to create supabase client from window.supabase, falling back to ESM import', err);
+      console.warn('Failed to create supabase client from window globals, falling back to ESM import', err);
     }
   }
 
   // As a fallback, dynamically import the ESM bundle from jsDelivr and create a client
   try {
-    const mod = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+    console.log('Attempting to load Supabase via ESM import...');
+    // Use a specific stable version that works well with ESM
+    const mod = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/+esm');
     const { createClient } = mod;
     _cachedClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('Created Supabase client from ESM import');
     return _cachedClient;
   } catch (err) {
     console.error('Failed to dynamically import supabase ESM client:', err);
